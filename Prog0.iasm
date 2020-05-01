@@ -1,0 +1,20 @@
+// Very simple test program
+
+DATA
+
+Number1: 7, word[1]
+Number2: 6, word[1]
+
+Stack:   0x55, word[128]
+
+CODE
+
+MOV SP, Stack           // Initialize SP
+
+MOV AX, Number1			// Load address of Number1 in AX
+MOV CX, [AX]            // Load value of Number1 in CX
+
+MOV AX, Number2			// Load address of Number2 in AX
+STOR CX, [AX]           // Store value of CX in memory location of Number2
+
+HLT

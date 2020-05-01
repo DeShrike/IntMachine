@@ -13,7 +13,8 @@ class Program():
         self.binary: List[int] = []
 
         self.source = Program.LoadFile(self.sourceFile)
-
+        self.preprocessed: List[str] = []
+        
     @staticmethod
     def LoadFile(filename: str) -> str:
         source: str = ""

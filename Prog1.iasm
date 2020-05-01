@@ -1,15 +1,23 @@
-// This is a comment
+// This programs adds 2 numbers:
+// Sum = Number1 + Number 2
 
-IMPORT std.iasm
+// And then calculates a Factorial
+// Result = Factorial(Input)
+
+IMPORT Lib.iasm
 
 DATA
 
 Number1: 7, word[1]
 Number2: 6, word[1]
 Sum:     0, word[1]
-Counter: 0, byte[1]
+
 String1: "This is a string", string[30]
-Stack:   0, word[128]
+
+Input:   7, byte[1]
+Result:  0, word[1]
+
+Stack:   0x55, word[128]
 
 CODE
 
@@ -32,5 +40,13 @@ JZ Loop 				// JUMP if not ZERO
 
 MOV	DX, Sum				// Store address of Sum in DX
 STOR AX, [DX]           // Store value of AX in memory location of Sum
+
+MOV BX, Input			// Load address of Input in BX
+MOV AX, [BX]            // Load value of Input in AX
+
+CALL Factorial          // Call Factorial(AX). Result will be in BX
+
+MOV DX, Result          // Load address of Result in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result
 
 HLT

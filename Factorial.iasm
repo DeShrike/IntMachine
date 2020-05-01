@@ -1,0 +1,33 @@
+CODE
+
+///////////////
+// Factorial //
+///////////////
+
+// Calculates Factorial(AX) -> BX
+
+Factorial:
+
+PUSH CX
+
+CMP AX, 0
+JZ Return1
+
+CMP AX, 1
+JZ Return1
+
+DEC AX          // AX = AX - 1
+MOV CX, BX
+CALL Factorial
+
+MUL BX, CX      // BX = BX * CX
+JMP Return
+
+Return1:
+
+MOV BX, 1
+
+Return:
+
+POP CX
+RET

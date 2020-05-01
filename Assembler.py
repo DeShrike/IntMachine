@@ -11,6 +11,8 @@ class Assembler():
 
     def __init__(self):
         self.block: str = ""
+        self.currentSourceFile: str = ""
+        self.currentLineNumber: int = 0
 
     def removeComment(self, line: str) -> str:
         ix = line.find("//")
@@ -63,12 +65,12 @@ class Assembler():
             index: int = 0
             if partCount == 1:
                 if self.block != "CODE":
-                    raise AssemblerError("Label declaration not in CODE block", lineNumber)
+                    raise AssemblerError("Label declaration not in CODE block", self.currentLineNumber + lineNumber, self.currentSourceFile)
                 index = self.codeIndex
                 # TODO self.codeIndex += 
             elif partCount == 3:
                 if self.block != "DATA":
-                    raise AssemblerError("Variable declaration not in DATA block", lineNumber)
+                    raise AssemblerError("Variable declaration not in DATA block", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
                 value = parts[1]
                 dt = parts[2]
@@ -78,16 +80,16 @@ class Assembler():
                     datatype = result.group(1)
                     size = int(result.group(2))
                     if datatype not in datatypes:
-                        raise AssemblerError(f"Unknown datatype: '{datatype}'", lineNumber)
+                        raise AssemblerError(f"Unknown datatype: '{datatype}'", self.currentLineNumber + lineNumber, self.currentSourceFile)
                     if size < 1 or size > 128:
-                        raise AssemblerError("Bad data length", lineNumber)
+                        raise AssemblerError("Bad data length", self.currentLineNumber + lineNumber, self.currentSourceFile)
                 else:
-                    raise AssemblerError("Syntax error: datatype", lineNumber)
+                    raise AssemblerError("Syntax error: datatype", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
                 index = self.dataIndex
                 self.dataIndex += size
             else:
-                raise AssemblerError("Syntax error", lineNumber)
+                raise AssemblerError("Syntax error", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
             label = Label(part0, index, datatype, size, value) 
             self.program.labels.append(label)
@@ -95,31 +97,47 @@ class Assembler():
             self.block = part0
         elif part0 == "DATA":
             self.block = part0
-        elif part0 == "IMPORT":
-            pass
+        elif part0 == "__source__":
+            self.currentSourceFile = parts[1]
+        elif part0 == "__line__":
+            self.currentLineNumber = int(parts[1]) - lineNumber - 1
         elif part0 in instructions:
             instruction = instructions[part0].clone()
+            instruction.sourceFile = self.currentSourceFile
+            instruction.lineNumber = self.currentLineNumber + lineNumber
+
+            if instruction.parameterCount != len(parts) - 1:
+                raise AssemblerError(f"Incorrect argumentcount. Expected {instruction.parameterCount} got {len(parts) - 1}", self.currentLineNumber + lineNumber, self.currentSourceFile)
+            
+            if instruction.parameterCount >= 1:
+                param = Parameter.fromString(parts[1])
+                if param == None:
+                    raise AssemblerError(f"Bad parameter: {parts[1]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
+                instruction.parameters.append(param)
+
+            if instruction.parameterCount >= 2:
+                param = Parameter.fromString(parts[2])
+                if param == None:
+                    raise AssemblerError(f"Bad parameter: {parts[2]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
+                instruction.parameters.append(param)
+
             # TODO add parameters to Instruction
             self.program.instructions.append(instruction)
         else:
-            raise AssemblerError("Syntax error", lineNumber)
+            raise AssemblerError("Syntax error", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
         return True
 
     def pass1(self) -> None:
         ''' Parse the lines and make Instructions and Labels '''
         
-        # Split source into lines and add HLT instruction (just to be sure there is one)
-        lines = self.program.source.replace("\t", " ").split("\n")
-        lines.append("HLT")
-
         self.program.instructions.clear()
         self.program.labels.clear()
         self.codeIndex = 0
         self.dataIndex = 0
         self.block = ""
 
-        for ix, line in enumerate(lines):
+        for ix, line in enumerate(self.program.preprocessed):
             line, parts = self.parseLine(line)
             if parts == None:
                 continue

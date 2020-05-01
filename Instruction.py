@@ -10,6 +10,7 @@ class Instruction():
 		self.parameterCount : int = parameterCount
 		self.parameters: List[Parameter] = []
 		self.lineNumber: int = 0
+		self.sourceFile: str = ""
 		self.labelName1: Union[str, None] = None
 		self.labelName2: Union[str, None] = None
 
@@ -23,7 +24,7 @@ class Instruction():
 
 	def getBytes(self) -> List[int]:
 		if len(self.parameters) != self.parameterCount:
-			raise AssemblerError("Parameter mismatch", self.lineNumber)
+			raise AssemblerError("Parameter mismatch", self.lineNumber, self.sourceFile)
 
 		b = [ self.opcode ]
 
