@@ -7,7 +7,7 @@ import re
 class Preprocessor():
     """ 
     Processes IMPORT instructions and adds indicators with filename and linenumber :
-    Lke this:
+    Like this:
 
     __source__ file.iasm
     __line__ 10
@@ -15,6 +15,7 @@ class Preprocessor():
     The assembler uses these lines to keep track of the line/sourcefile
 
     """
+
     def __init__(self):
         pass
 
@@ -24,8 +25,9 @@ class Preprocessor():
         lines = program.source.replace("\t", " ").split("\n")
 
         program.preprocessed.clear()
-        program.preprocessed.append(f"__source__ {program.sourceFile}")
+        program.preprocessed.append(f"__source__ { program.sourceFile }")
         program.preprocessed.append(f"__line__ {1}")
+
         for ix, line in enumerate(lines):
             parts = line.split(" ")
             if parts[0] == "IMPORT":
@@ -43,6 +45,3 @@ class Preprocessor():
                     raise PreprocessorError("SYNTEX ERROR", ix, program.sourceFile)
             else:
                 program.preprocessed.append(line)
-
-        pass
-

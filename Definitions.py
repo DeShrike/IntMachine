@@ -9,9 +9,9 @@ STOR AX, [BX]	reg, ref
 """
 
 addressingModes = { 
-    "direct": 0,
-    "register": 1,
-    "reference": 2
+    "direct": 10,
+    "register": 11,
+    "reference": 12
 }
 
 registers = {

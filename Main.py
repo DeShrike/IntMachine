@@ -10,7 +10,7 @@ from Cpu import *
 if __name__ == "__main__":
 
     try:
-        prog = Program("Prog0.iasm")
+        prog = Program("Prog1.iasm")
 
         preproc = Preprocessor()
         preproc.preprocess(prog)
@@ -21,17 +21,17 @@ if __name__ == "__main__":
         assembler = Assembler()
         assembler.assemble(prog)
 
-        for l in prog.labels:
-            print(l, f" Position: {l.position}")
+        # for l in prog.labels:
+        #     print(l, f" Position: {l.position}")
 
-        for i in prog.instructions:
-            print(i, f" Position: {i.position}  Label: {i.labelName}")
-            for p in i.parameters:
-                print(" ", p, end = "")
-                if p.labelName != None:
-                    print(f"   {p.labelName}")
-                else:
-                    print("")
+        # for i in prog.instructions:
+        #     print(i, f" Position: {i.position}  Label: {i.labelName}")
+        #     for p in i.parameters:
+        #         print(" ", p, end = "")
+        #         if p.labelName != None:
+        #             print(f"   {p.labelName}")
+        #         else:
+        #             print("")
 
         for b in prog.binary:
             print("%04X " % b, end = "")

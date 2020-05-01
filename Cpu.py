@@ -65,16 +65,22 @@ class Cpu():
         self.FLAGS = 0
 
     def SF(self) -> bool:
-        return self.FLAGS & 0b0001 == 0b0001
+        return self.FLAGS & 0b000001 == 0b000001
 
     def OF(self) -> bool:
-        return self.FLAGS & 0b0010 == 0b0010
+        return self.FLAGS & 0b000010 == 0b000010
 
     def ZF(self) -> bool:
-        return self.FLAGS & 0b0100 == 0b0100
+        return self.FLAGS & 0b000100 == 0b000100
 
     def CF(self) -> bool:
-        return self.FLAGS & 0b1000 == 0b1000
+        return self.FLAGS & 0b001000 == 0b001000
+
+    def PF(self) -> bool:
+        return self.FLAGS & 0b010000 == 0b010000
+
+    def IF(self) -> bool:
+        return self.FLAGS & 0b100000 == 0b100000
 
     def cycle(self) -> bool:
         i = self.memory[self.IP]

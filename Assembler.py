@@ -29,7 +29,7 @@ class Assembler():
         
         self.program.assembled = True
 
-    def findLabel(self, name: str):
+    def findLabel(self, name: Optional[str]):
         for l in self.program.labels:
             if l.name == name:
                 return l
@@ -73,15 +73,12 @@ class Assembler():
             if partCount == 1:
                 if self.block != "CODE":
                     raise AssemblerError("Label declaration not in CODE block", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
                 self.lastLabel = part0
 
             elif partCount == 3:
                 if self.block != "DATA":
                     raise AssemblerError("Variable declaration not in DATA block", self.currentLineNumber + lineNumber, self.currentSourceFile)
-
-                value = Definitions.parseNumber(parts[1])
-                if value == None:
-                    raise AssemblerError(f"Bad Variable value: {parts[1]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
                 dt = parts[2]
 
@@ -89,10 +86,20 @@ class Assembler():
                 if result:
                     datatype = result.group(1)
                     size = int(result.group(2))
+
                     if datatype not in datatypes:
                         raise AssemblerError(f"Unknown datatype: '{datatype}'", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
                     if size < 1 or size > 128:
                         raise AssemblerError("Bad data length", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
+                    if datatype == "string":
+                        value = parts[1]
+                    else:
+                        value = Definitions.parseNumber(parts[1])
+                    
+                    if value == None:
+                        raise AssemblerError(f"Bad Variable value: {parts[1]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
                 else:
                     raise AssemblerError("Syntax error: datatype", self.currentLineNumber + lineNumber, self.currentSourceFile)
@@ -187,6 +194,7 @@ class Assembler():
         for l in self.program.labels:
             if l.size == 0:
                 continue
+
             dataSize += l.size
             l.position = positionInMemory
             positionInMemory += l.size

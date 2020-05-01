@@ -1,4 +1,5 @@
 import Definitions
+from typing import Union, Optional
 import re
 
 class Parameter():
@@ -6,7 +7,7 @@ class Parameter():
     def __init__(self, mode: int, value: int):
         self.mode = mode
         self.value = value
-        self.labelName = None
+        self.labelName: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"Parameter({self.mode}, {hex(self.value)})"
@@ -30,7 +31,7 @@ class Parameter():
         return cls(Definitions.addressingModes["register"], register)
 
     @classmethod
-    def fromString(cls, val: str) -> "Parameter":
+    def fromString(cls, val: str) -> Union["Parameter", None]:
         if val in Definitions.registers:
             return Parameter.fromRegister(Definitions.registers[val])
 

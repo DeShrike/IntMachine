@@ -22,3 +22,4 @@ class Label():
             return ret + padding
         else:
             return [self.value for _ in range(self.size)]
+
