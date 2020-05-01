@@ -1,0 +1,39 @@
+// This is a comment
+
+IMPORT std.sasm
+
+DATA
+
+Number1: 7, word[1]
+Number2: 6, word[1]
+Sum:     0, word[1]
+Counter: 0, byte[1]
+String1: "This is a string", string[30]
+
+CODE
+
+// MOV	AX, Number1
+// MOV [AX], 20
+
+// MOV	AX, Number2
+// MOV [AX], 30
+
+MOV AX, Number1			// Load Number1 in CX
+MOV CX, [AX]
+
+MOV AX, Number2			// Load Number2 in DX
+MOV DX, [AX]
+
+MOV AX, 0				// Init AX
+
+Loop:
+
+ADD AX, CX				// Add CX (Number1) to AX
+DEC DX					// Decrease DX by 1
+
+JZ Loop 				// JUMP if not ZERO
+
+MOV	DX, Sum				// Store AX in Sum
+STOR AX, [DX]
+
+HLT
