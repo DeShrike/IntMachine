@@ -30,13 +30,13 @@ class Instruction():
 
 		if self.parameterCount >= 1:
 			p = self.parameters[0]
-			m = p.mode << 8
+			m = p.mode << 12
 			b[0] = b[0] | m
 			b.append(p.value)
 
 		if self.parameterCount == 2:
 			p = self.parameters[1]
-			m = p.mode << 12
+			m = p.mode << 8
 			b[0] = b[0] | m
 			b.append(p.value)
 

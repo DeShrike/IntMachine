@@ -85,6 +85,8 @@ class Cpu():
     def cycle(self) -> bool:
         i = self.memory[self.IP]
         opcode = i & 0x00FF
+        parameterMode1 = (i & 0xF000) > 12
+        parameterMode2 = (i & 0x0F00) > 8
         instruction: Callable = self.instructionTable[opcode]
         return instruction()
 

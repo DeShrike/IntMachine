@@ -12,7 +12,7 @@ class Preprocessor():
     __source__ file.iasm
     __line__ 10
 
-    The assembler uses these lines to keep track of the line/sourcefile
+    The assembler uses these lines to keep track of the linenumber/sourcefile
 
     """
 
@@ -20,7 +20,7 @@ class Preprocessor():
         pass
 
     def preprocess(self, program: Program) -> None:
-        print(f"PREPROCESSING {program.sourceFile}")
+        print(f"PREPROCESSING { program.sourceFile }")
 
         lines = program.source.replace("\t", " ").split("\n")
 
@@ -38,10 +38,10 @@ class Preprocessor():
                     preproc.preprocess(include)
 
                     program.preprocessed = program.preprocessed + include.preprocessed
-                    program.preprocessed.append(f"__source__ {program.sourceFile}")
+                    program.preprocessed.append(f"__source__ { program.sourceFile }")
                     program.preprocessed.append(f"__line__ {ix + 2}")
                     
                 else:
-                    raise PreprocessorError("SYNTEX ERROR", ix, program.sourceFile)
+                    raise PreprocessorError("SYNTAX ERROR", ix, program.sourceFile)
             else:
                 program.preprocessed.append(line)
