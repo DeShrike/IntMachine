@@ -1,5 +1,5 @@
 import Definitions
-from Exceptions import *
+from Exceptions import CompileError, ExcecutionError
 from Instruction import *
 from Label import *
 from Parameter import *

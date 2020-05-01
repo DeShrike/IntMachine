@@ -1,13 +1,12 @@
 from Computer import *
 from Compiler import *
-from Exceptions import CompileError, RunError
+from Exceptions import CompileError, ExcecutionError
 from Cpu import *
 
 def LoadFile(filename: str) -> str:
     source: str = ""
-    file = open(filename, "r") 
-    for line in file:
-        source.append(line)
+    file = open(filename, "r")
+    source = file.read()
     file.close()
     return source
 

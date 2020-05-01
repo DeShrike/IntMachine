@@ -1,9 +1,8 @@
 from Definitions import *
-from Exceptions import CompileError, RunError
+from Exceptions import CompileError, ExcecutionError
 from Instruction import *
 from Label import *
-from Parameter import *
-import re
+from typing import List
 
 class Program():
 
@@ -11,7 +10,7 @@ class Program():
         self.bootstrapSize: int = 4
         self.source = source
         self.compiled: bool = False
-        self.instructions = []
-        self.labels = []
-        self.binary = []
+        self.instructions: List[Instruction] = []
+        self.labels: List[Label] = []
+        self.binary: List[int] = []
 

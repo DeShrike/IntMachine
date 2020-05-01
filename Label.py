@@ -1,3 +1,5 @@
+from typing import List
+
 class Label():
 
     def __init__(self, name: str, position: int, datatype: str, size: int, value):

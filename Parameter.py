@@ -7,13 +7,13 @@ class Parameter():
         self.value = value
 
     @classmethod
-    def fromDirect(cls, value: int) -> Parameter:
+    def fromDirect(cls, value: int):
         return cls(addressingModes["direct"], value)
 
     @classmethod
-    def fromRef(cls, ref: int) -> Parameter:
+    def fromRef(cls, ref: int):
         return cls(addressingModes["ref"], ref)
 
     @classmethod
-    def fromRegister(cls, register: int) -> Parameter:
+    def fromRegister(cls, register: int):
         return cls(addressingModes[register], 0)

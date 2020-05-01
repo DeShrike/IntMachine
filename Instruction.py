@@ -1,22 +1,23 @@
-from Exceptions import CompileError, RunError
+from Exceptions import CompileError, ExcecutionError
+from typing import List
 
 class Instruction():
 
 	def __init__(self, mnemonic: str, opcode: int, parameterCount: int):
-		self.mnemonic = mnemonic
-		self.opcode = opcode
-		self.parameterCount = parameterCount
+		self.mnemonic: str = mnemonic
+		self.opcode: int = opcode
+		self.parameterCount : int= parameterCount
 		self.parameters = []
-		self.memIndex = 0
-		self.lineNumber = 0
+		self.lineNumber: int = 0
+		self.labelName1: str = None
+		self.labelName2: str = None
 
 	def __repr__(self) -> str:
 		return f"Instruction('{self.mnemonic}', {hex(self.opcode)}, {self.parameterCount})"
 
-	def clone(self) -> Instruction:
-		i = Instruction(self.mnemonic, self.opcode, self.parameterCount, self.cycles)
+	def clone(self):
+		i = Instruction(self.mnemonic, self.opcode, self.parameterCount)
 		i.parameters = self.parameters[:]
-		i.memIndex = self.memIndex
 		return i
 
 	def getBytes(self) -> List[int]:

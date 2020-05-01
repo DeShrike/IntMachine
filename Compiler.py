@@ -1,5 +1,5 @@
 from Definitions import *
-from Exceptions import CompileError, RunError
+from Exceptions import CompileError, ExcecutionError
 from Program import *
 from Instruction import *
 from Label import *
@@ -21,20 +21,6 @@ class Compiler():
         self.program = program
 
         self.pass1()
-        
-        # add bootstrap code
-
-        # JUMP to first program instruction
-        i = instructions["JMP"].clone()
-        i.parameters.append(Parameter.fromDirect(self.instructions[-1].memIndex))
-        self.program.instructions.insert(0, i)
-
-        # set SP
-        i = instructions["MOV"].clone()
-        i.parameters.append(Parameter.fromRegister("SP"))
-        i.parameters.append(Parameter.fromDirect(self.instructions[-1].memIndex + self.instructions[-1].parameterCount + 1))
-        self.program.instructions.insert(0, i)
-
         self.pass2()
         
         self.program.compiled = True
@@ -103,7 +89,7 @@ class Compiler():
                 raise CompileError("Syntax error", lineNumber)
 
             label = Label(part0, index, datatype, size, value) 
-            self.labels.append(label)
+            self.program.labels.append(label)
         elif part0 == "CODE":
             self.block = part0
         elif part0 == "DATA":
@@ -112,21 +98,23 @@ class Compiler():
             pass
         elif part0 in instructions:
             instruction = instructions[part0].clone()
-            instruction.memIndex = self.memIndex
-
-            self.instructions.append(instruction)
+            # TODO add parameters to Instruction
+            self.program.instructions.append(instruction)
         else:
             raise CompileError("Syntax error", lineNumber)
 
         return True
 
     def pass1(self) -> None:
-        ''' Parse the lines and make Instructions '''
+        ''' Parse the lines and make Instructions and Labels '''
+        
+        # Split source into lines and add HLT instruction (just to be sure there is one)
         lines = self.program.source.replace("\t", " ").split("\n")
+        lines.append("HLT")
+
         self.program.instructions.clear()
         self.program.labels.clear()
-        self.program.binary.clear()
-        self.codeIndex = self.bootstrapSize
+        self.codeIndex = 0
         self.dataIndex = 0
         self.block = None
 
@@ -138,18 +126,38 @@ class Compiler():
             if self.compileLine(ix, parts) == False:
                 break
 
+        print(f"PASS 1 - {len(self.program.instructions)} instructions - {len(self.program.labels)} variables")
+
     def pass2(self) -> None:
-        ''' Convert the Variables and Instructions to binary '''
+        ''' Convert the Labels and Instructions to binary '''
 
         self.program.binary.clear()
 
+        # First calculate size of program
+        codeSize = 0
+        for i in self.program.instructions:
+            codeSize += i.parameterCount + 1
+
+        # Now calculate size of data
+        dataSize = 0
+        positionInMemory = codeSize
+
+        for i in self.program.labels:
+            dataSize += i.size
+            i.position = positionInMemory
+            positionInMemory += i.size
+
+        # Now correct instructions with position of labels
+        # TODO
+
+        # First add the instructions
         for i in self.program.instructions:
             b = i.getBytes()
-            for ix, bb in enumerate(b):
-                self.program.binary[ix + i.memIndex] = bb
+            self.program.binary = self.program.binary + b
 
+        # Now add the data
         for l in self.program.labels:
             b = l.getBytes()
-            for ix, bb in enumerate(b):
-                self.program.binary[ix + l.position] = bb
+            self.program.binary = self.program.binary + b
 
+        print(f"PASS 2 - Code Size: {codeSize} Data Size: {dataSize}")
