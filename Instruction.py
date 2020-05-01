@@ -1,4 +1,4 @@
-from Exceptions import CompileError, ExcecutionError
+from Exceptions import AssemblerError, ExcecutionError
 from typing import List
 
 class Instruction():
@@ -22,7 +22,7 @@ class Instruction():
 
 	def getBytes(self) -> List[int]:
 		if len(self.parameters) != self.parameterCount:
-			raise CompileError("Paramete mismatch", self.lineNumber)
+			raise AssemblerError("Paramete mismatch", self.lineNumber)
 
 		b = [ self.opcode ]
 

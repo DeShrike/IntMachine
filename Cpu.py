@@ -1,17 +1,14 @@
 import Definitions
-from Exceptions import CompileError, ExcecutionError
-from Instruction import *
-from Label import *
-from Parameter import *
-import re
+from Exceptions import ExcecutionError
+from typing import List, Dict, Callable
 
 class Cpu():
 
-    def __init__(self, memory):
+    def __init__(self, memory: List[int]):
         self.memory = memory
         self.reset()
 
-        self.instructionTable = {
+        self.instructionTable: Dict[int, Callable] = {
             0x0010: self.MOV,
             0x0011: self.CMP,
             
@@ -67,11 +64,11 @@ class Cpu():
         self.IP = 0
         self.FLAGS = 0
 
-    def cycle(self):
+    def cycle(self) -> bool:
         i = self.memory[self.IP]
         opcode = i & 0x00FF
         print(hex(opcode))
-        instruction = self.instructionTable[opcode]
+        instruction: Callable = self.instructionTable[opcode]
         return instruction()
 
     def JMP(self):

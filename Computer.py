@@ -6,7 +6,7 @@ class Computer():
 	def __init__(self):
 		self.memorySize = 1024
 		self.memory = [0 for _ in range(self.memorySize)]
-		self.cpu = Cpu(self.memory)
+		self.cpu: Cpu = Cpu(self.memory)
 
 	def loadProgram(self, program: Program) -> None:
 		if program.compiled == False:
