@@ -4,6 +4,8 @@ from Compiler import *
 from Exceptions import AssemblerError, CompilerError, ExcecutionError
 from Cpu import *
 
+# python -m mypy Main.py
+
 if __name__ == "__main__":
 
     try:

@@ -4,13 +4,13 @@ from Program import *
 from Instruction import *
 from Label import *
 from Parameter import *
-from typing import List
+from typing import List, Optional, Union
 import re
 
 class Assembler():
 
     def __init__(self):
-        pass
+        self.block: str = ""
 
     def removeComment(self, line: str) -> str:
         ix = line.find("//")
@@ -24,7 +24,7 @@ class Assembler():
         self.pass1()
         self.pass2()
         
-        self.program.compiled = True
+        self.program.assembled = True
 
     def parseLine(self, line: str):
         line = self.removeComment(line)
@@ -53,14 +53,14 @@ class Assembler():
 
     def compileLine(self, lineNumber: int, parts) -> bool:
         partCount = len(parts)
-        part0 = parts[0].strip()
+        part0: str = parts[0].strip()
 
         if part0.endswith(":"):
             part0 = part0[:-1]
-            datatype = None
-            value = 0
-            size = 0
-            index = 0
+            datatype: Union[None, str] = None
+            value: int = 0
+            size: int = 0
+            index: int = 0
             if partCount == 1:
                 if self.block != "CODE":
                     raise AssemblerError("Label declaration not in CODE block", lineNumber)
@@ -117,7 +117,7 @@ class Assembler():
         self.program.labels.clear()
         self.codeIndex = 0
         self.dataIndex = 0
-        self.block = None
+        self.block = ""
 
         for ix, line in enumerate(lines):
             line, parts = self.parseLine(line)
@@ -143,10 +143,10 @@ class Assembler():
         dataSize: int = 0
         positionInMemory: int = codeSize
 
-        for i in self.program.labels:
-            dataSize += i.size
-            i.position = positionInMemory
-            positionInMemory += i.size
+        for l in self.program.labels:
+            dataSize += l.size
+            l.position = positionInMemory
+            positionInMemory += l.size
 
         # Now correct instructions with position of labels
         # TODO

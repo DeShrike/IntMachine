@@ -1,4 +1,4 @@
-from Definitions import *
+import Definitions
 
 class Parameter():
 
@@ -8,12 +8,12 @@ class Parameter():
 
     @classmethod
     def fromDirect(cls, value: int):
-        return cls(addressingModes["direct"], value)
+        return cls(Definitions.addressingModes["direct"], value)
 
     @classmethod
     def fromRef(cls, ref: int):
-        return cls(addressingModes["ref"], ref)
+        return cls(Definitions.addressingModes["ref"], ref)
 
     @classmethod
     def fromRegister(cls, register: int):
-        return cls(addressingModes[register], 0)
+        return cls(Definitions.addressingModes["register"], register)

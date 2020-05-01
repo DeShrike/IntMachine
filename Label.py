@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 class Label():
 
-    def __init__(self, name: str, position: int, datatype: str, size: int, value):
+    def __init__(self, name: str, position: int, datatype: Optional[str], size: int, value):
         self.name = name
         self.position = position
         self.datatype = datatype

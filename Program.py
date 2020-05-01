@@ -7,7 +7,7 @@ class Program():
     def __init__(self, sourceFile: str):
         self.sourceFile: str = sourceFile
         self.bootstrapSize: int = 4
-        self.compiled: bool = False
+        self.assembled: bool = False
         self.instructions: List[Instruction] = []
         self.labels: List[Label] = []
         self.binary: List[int] = []

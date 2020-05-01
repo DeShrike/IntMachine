@@ -1,3 +1,4 @@
+from Exceptions import ExcecutionError
 from Cpu import *
 from Program import *
 
@@ -9,8 +10,8 @@ class Computer():
 		self.cpu: Cpu = Cpu(self.memory)
 
 	def loadProgram(self, program: Program) -> None:
-		if program.compiled == False:
-			program.compile()
+		if program.assembled == False:
+			raise ExcecutionError("Program not compiled", 0)
 
 		for ix, byte in enumerate(program.binary):
 			self.memory[ix] = byte

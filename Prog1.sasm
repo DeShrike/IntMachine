@@ -18,11 +18,11 @@ CODE
 // MOV	AX, Number2
 // MOV [AX], 30
 
-MOV AX, Number1			// Load Number1 in CX
-MOV CX, [AX]
+MOV AX, Number1			// Load address of Number1 in AX
+MOV CX, [AX]            // Load value of Number1 in CX
 
-MOV AX, Number2			// Load Number2 in DX
-MOV DX, [AX]
+MOV AX, Number2			// Load address of Number2 in AX
+MOV DX, [AX]            // Load value of Number2 in DX
 
 MOV AX, 0				// Init AX
 

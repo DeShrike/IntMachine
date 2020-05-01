@@ -1,16 +1,17 @@
 from Exceptions import AssemblerError, ExcecutionError
-from typing import List
+from Parameter import *
+from typing import List, Union
 
 class Instruction():
 
 	def __init__(self, mnemonic: str, opcode: int, parameterCount: int):
 		self.mnemonic: str = mnemonic
 		self.opcode: int = opcode
-		self.parameterCount : int= parameterCount
-		self.parameters = []
+		self.parameterCount : int = parameterCount
+		self.parameters: List[Parameter] = []
 		self.lineNumber: int = 0
-		self.labelName1: str = None
-		self.labelName2: str = None
+		self.labelName1: Union[str, None] = None
+		self.labelName2: Union[str, None] = None
 
 	def __repr__(self) -> str:
 		return f"Instruction('{self.mnemonic}', {hex(self.opcode)}, {self.parameterCount})"
@@ -22,7 +23,7 @@ class Instruction():
 
 	def getBytes(self) -> List[int]:
 		if len(self.parameters) != self.parameterCount:
-			raise AssemblerError("Paramete mismatch", self.lineNumber)
+			raise AssemblerError("Parameter mismatch", self.lineNumber)
 
 		b = [ self.opcode ]
 
