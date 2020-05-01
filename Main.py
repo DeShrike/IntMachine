@@ -9,7 +9,7 @@ from Cpu import *
 if __name__ == "__main__":
 
     try:
-        prog = Program("Prog1.sasm")
+        prog = Program("Prog1.iasm")
 
         assembler = Assembler()
         assembler.assemble(prog)

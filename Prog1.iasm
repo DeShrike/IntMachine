@@ -1,6 +1,6 @@
 // This is a comment
 
-IMPORT std.sasm
+IMPORT std.iasm
 
 DATA
 
@@ -9,14 +9,11 @@ Number2: 6, word[1]
 Sum:     0, word[1]
 Counter: 0, byte[1]
 String1: "This is a string", string[30]
+Stack:   0, word[128]
 
 CODE
 
-// MOV	AX, Number1
-// MOV [AX], 20
-
-// MOV	AX, Number2
-// MOV [AX], 30
+MOV SP, Stack           // Initialize SP
 
 MOV AX, Number1			// Load address of Number1 in AX
 MOV CX, [AX]            // Load value of Number1 in CX
@@ -33,7 +30,7 @@ DEC DX					// Decrease DX by 1
 
 JZ Loop 				// JUMP if not ZERO
 
-MOV	DX, Sum				// Store AX in Sum
-STOR AX, [DX]
+MOV	DX, Sum				// Store address of Sum in DX
+STOR AX, [DX]           // Store value of AX in memory location of Sum
 
 HLT
