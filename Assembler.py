@@ -13,6 +13,7 @@ class Assembler():
         self.block: str = ""
         self.currentSourceFile: str = ""
         self.currentLineNumber: int = 0
+        self.lastLabel = None
 
     def removeComment(self, line: str) -> str:
         ix = line.find("//")
@@ -20,13 +21,19 @@ class Assembler():
             return line[:ix]
         return line
 
-    def assemble(self, program: Program):
+    def assemble(self, program: Program) -> None:
         self.program = program
 
         self.pass1()
         self.pass2()
         
         self.program.assembled = True
+
+    def findLabel(self, name: str):
+        for l in self.program.labels:
+            if l.name == name:
+                return l
+        return None
 
     def parseLine(self, line: str):
         line = self.removeComment(line)
@@ -62,12 +69,12 @@ class Assembler():
             datatype: Union[None, str] = None
             value: int = 0
             size: int = 0
-            index: int = 0
+
             if partCount == 1:
                 if self.block != "CODE":
                     raise AssemblerError("Label declaration not in CODE block", self.currentLineNumber + lineNumber, self.currentSourceFile)
-                index = self.codeIndex
-                # TODO self.codeIndex += 
+                self.lastLabel = part0
+
             elif partCount == 3:
                 if self.block != "DATA":
                     raise AssemblerError("Variable declaration not in DATA block", self.currentLineNumber + lineNumber, self.currentSourceFile)
@@ -75,7 +82,7 @@ class Assembler():
                 value = parts[1]
                 dt = parts[2]
 
-                result = re.match("([a-zA-Z]*)\\[([0-9]*)\\]", dt)
+                result = re.match("^([a-zA-Z]*)\\[([0-9]*)\\]$", dt)
                 if result:
                     datatype = result.group(1)
                     size = int(result.group(2))
@@ -83,28 +90,34 @@ class Assembler():
                         raise AssemblerError(f"Unknown datatype: '{datatype}'", self.currentLineNumber + lineNumber, self.currentSourceFile)
                     if size < 1 or size > 128:
                         raise AssemblerError("Bad data length", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
                 else:
                     raise AssemblerError("Syntax error: datatype", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-                index = self.dataIndex
-                self.dataIndex += size
             else:
                 raise AssemblerError("Syntax error", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-            label = Label(part0, index, datatype, size, value) 
+            label = Label(part0, datatype, size, value) 
             self.program.labels.append(label)
+
         elif part0 == "CODE":
             self.block = part0
+
         elif part0 == "DATA":
             self.block = part0
+
         elif part0 == "__source__":
             self.currentSourceFile = parts[1]
+
         elif part0 == "__line__":
             self.currentLineNumber = int(parts[1]) - lineNumber - 1
+
         elif part0 in instructions:
             instruction = instructions[part0].clone()
             instruction.sourceFile = self.currentSourceFile
             instruction.lineNumber = self.currentLineNumber + lineNumber
+            instruction.labelName = self.lastLabel
+            self.lastLabel = None
 
             if instruction.parameterCount != len(parts) - 1:
                 raise AssemblerError(f"Incorrect argumentcount. Expected {instruction.parameterCount} got {len(parts) - 1}", self.currentLineNumber + lineNumber, self.currentSourceFile)
@@ -113,16 +126,18 @@ class Assembler():
                 param = Parameter.fromString(parts[1])
                 if param == None:
                     raise AssemblerError(f"Bad parameter: {parts[1]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
                 instruction.parameters.append(param)
 
             if instruction.parameterCount >= 2:
                 param = Parameter.fromString(parts[2])
                 if param == None:
                     raise AssemblerError(f"Bad parameter: {parts[2]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
                 instruction.parameters.append(param)
 
-            # TODO add parameters to Instruction
             self.program.instructions.append(instruction)
+
         else:
             raise AssemblerError("Syntax error", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
@@ -155,19 +170,33 @@ class Assembler():
         # First calculate size of program
         codeSize: int = 0
         for i in self.program.instructions:
+            i.position = codeSize
             codeSize += i.parameterCount + 1
+            if i.labelName != None:
+                l = self.findLabel(i.labelName)
+                if l != None:
+                    l.position = i.position
 
         # Now calculate size of data
         dataSize: int = 0
         positionInMemory: int = codeSize
 
         for l in self.program.labels:
+            if l.size == 0:
+                continue
             dataSize += l.size
             l.position = positionInMemory
             positionInMemory += l.size
 
         # Now correct instructions with position of labels
-        # TODO
+        for i in self.program.instructions:
+            for p in i.parameters:
+                if p.labelName != None:
+                    l = self.findLabel(p.labelName)
+                    if l == None:
+                        raise AssemblerError(f"Unknown name: {p.labelName}", i.lineNumber, i.sourceFile)
+                    else:
+                        p.value = l.position
 
         # First add the instructions
         for i in self.program.instructions:

@@ -11,8 +11,8 @@ class Instruction():
 		self.parameters: List[Parameter] = []
 		self.lineNumber: int = 0
 		self.sourceFile: str = ""
-		self.labelName1: Union[str, None] = None
-		self.labelName2: Union[str, None] = None
+		self.labelName: Union[str, None] = None
+		self.position: int = 0
 
 	def __repr__(self) -> str:
 		return f"Instruction('{self.mnemonic}', {hex(self.opcode)}, {self.parameterCount})"

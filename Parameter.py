@@ -8,6 +8,9 @@ class Parameter():
         self.value = value
         self.labelName = None
 
+    def __repr__(self) -> str:
+        return f"Parameter({self.mode}, {hex(self.value)})"
+
     @classmethod
     def fromDirect(cls, value: int) -> "Parameter":
         return cls(Definitions.addressingModes["direct"], value)
@@ -28,7 +31,6 @@ class Parameter():
 
     @staticmethod
     def ParseNumber(value: str):
-
         if value.isnumeric():
             return int(value)
 
@@ -44,7 +46,7 @@ class Parameter():
 
     @classmethod
     def fromString(cls, val: str) -> "Parameter":
-        if str in Definitions.registers:
+        if val in Definitions.registers:
             return Parameter.fromRegister(Definitions.registers[val])
 
         if re.match("^\\[([A-D]X|SP|IP)\\]$", val):

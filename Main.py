@@ -15,17 +15,23 @@ if __name__ == "__main__":
         preproc = Preprocessor()
         preproc.preprocess(prog)
 
-        for l in prog.preprocessed:
-            print(l)
+        # for l in prog.preprocessed:
+        #    print(l)
 
         assembler = Assembler()
         assembler.assemble(prog)
 
-        # for l in prog.labels:
-        #    print(l)
+        for l in prog.labels:
+            print(l, f" Position: {l.position}")
 
-        # for i in prog.instructions:
-        #    print(i)
+        for i in prog.instructions:
+            print(i, f" Position: {i.position}  Label: {i.labelName}")
+            for p in i.parameters:
+                print(" ", p, end = "")
+                if p.labelName != None:
+                    print(f"   {p.labelName}")
+                else:
+                    print("")
 
         #computer = Computer()
         #computer.loadProgram(prog)
