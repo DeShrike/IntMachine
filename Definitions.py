@@ -83,3 +83,17 @@ instructions = {
 }
 
 # https://www.programiz.com/python-programming/methods/string/find
+
+def parseNumber(value: str):
+    if value.isnumeric():
+        return int(value)
+
+    if re.match("^0(x|X)([0-9A-Fa-f]{1,4})$", value):
+        value = value[2:]
+        return int(value, 16)
+
+    if re.match("^0(b|B)([0-1]{8}|[0-1]{16})$", value):
+        value = value[2:]
+        return int(value, 2)
+
+    return None

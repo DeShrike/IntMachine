@@ -13,7 +13,8 @@ MOV SP, Stack           // Initialize SP
 
 JMP DummyLabel
 
-HLT
+PUSH AX
+POP AX
 
 DummyLabel:
 

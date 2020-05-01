@@ -16,4 +16,9 @@ class Label():
             return f"Label('{self.name}', '{self.datatype}', {self.size}, {self.value})"
 
     def getBytes(self) -> List[int]:
-        return [0 for _ in range(self.size)]
+        if self.datatype == "string":
+            ret = [ord(x) for x in self.value]
+            padding = [0 for _ in range(self.size - len(self.value))]
+            return ret + padding
+        else:
+            return [self.value for _ in range(self.size)]

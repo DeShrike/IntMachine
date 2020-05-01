@@ -33,9 +33,14 @@ if __name__ == "__main__":
                 else:
                     print("")
 
-        #computer = Computer()
-        #computer.loadProgram(prog)
-        #computer.run()
+        for b in prog.binary:
+            print("%04X " % b, end = "")
+
+        print("")
+
+        computer = Computer()
+        computer.loadProgram(prog)
+        computer.run()
 
     except PreprocessorError as e:
         print(e)

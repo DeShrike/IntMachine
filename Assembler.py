@@ -79,7 +79,10 @@ class Assembler():
                 if self.block != "DATA":
                     raise AssemblerError("Variable declaration not in DATA block", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-                value = parts[1]
+                value = Definitions.parseNumber(parts[1])
+                if value == None:
+                    raise AssemblerError(f"Bad Variable value: {parts[1]}", self.currentLineNumber + lineNumber, self.currentSourceFile)
+
                 dt = parts[2]
 
                 result = re.match("^([a-zA-Z]*)\\[([0-9]*)\\]$", dt)

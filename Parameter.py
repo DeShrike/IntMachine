@@ -29,21 +29,6 @@ class Parameter():
     def fromRegister(cls, register: int) -> "Parameter":
         return cls(Definitions.addressingModes["register"], register)
 
-    @staticmethod
-    def ParseNumber(value: str):
-        if value.isnumeric():
-            return int(value)
-
-        if re.match("^0(x|X)([0-9A-Fa-f]{1,4})$", value):
-            value = value[2:]
-            return int(value, 16)
-
-        if re.match("^0(b|B)([0-1]{8}|[0-1]{16})$", value):
-            value = value[2:]
-            return int(value, 2)
-
-        return None
-
     @classmethod
     def fromString(cls, val: str) -> "Parameter":
         if val in Definitions.registers:
@@ -53,7 +38,7 @@ class Parameter():
             val = val[1:-1]
             return Parameter.fromRef(Definitions.registers[val])
 
-        n = Parameter.ParseNumber(val)
+        n = Definitions.parseNumber(val)
         if n != None:
             return Parameter.fromDirect(n)
 
@@ -61,3 +46,4 @@ class Parameter():
             return Parameter.fromLabel(val)
 
         return None
+
