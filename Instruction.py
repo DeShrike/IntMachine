@@ -41,3 +41,7 @@ class Instruction():
 			b.append(p.value)
 
 		return b
+
+	def disassemble(self) -> str:
+		return self.mnemonic
+

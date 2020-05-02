@@ -4,6 +4,11 @@
 // And then calculates a Factorial
 // Result = Factorial(Input)
 
+CODE
+
+MOV SP, Stack           // Initialize SP
+JMP Main
+
 IMPORT Lib.iasm
 
 DATA
@@ -21,7 +26,7 @@ Stack:   0x5555, word[32]
 
 CODE
 
-MOV SP, Stack           // Initialize SP
+Main:
 
 MOV AX, Number1			// Load address of Number1 in AX
 MOV CX, [AX]            // Load value of Number1 in CX

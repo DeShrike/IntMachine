@@ -91,199 +91,199 @@ class Cpu():
         return instruction()
 
     def JMP(self):
-        print("JMP")
+        # print("JMP")
 
         self.IP += 2
         return True
 
     def MOV(self):
-        print("MOV")
+        # print("MOV")
 
         self.IP += 3
         return True
 
     def STOR(self):
-        print("STOR")
+        # print("STOR")
 
         self.IP += 3
         return True
 
     def CMP(self):
-        print("CMP")
+        # print("CMP")
 
         self.IP += 3
         return True
 
     def JZ(self):
-        print("JZ")
+        # print("JZ")
 
         self.IP += 2
         return True
 
     def JNZ(self):
-        print("JNZ")
+        # print("JNZ")
 
         self.IP += 2
         return True
 
     def JO(self):
-        print("JO")
+        # print("JO")
 
         self.IP += 2
         return True
 
     def JNO(self):
-        print("JNO")
+        # print("JNO")
 
         self.IP += 2
         return True
 
     def JC(self):
-        print("JO")
+        # print("JO")
 
         self.IP += 2
         return True
 
     def JNC(self):
-        print("JNC")
+        # print("JNC")
 
         self.IP += 2
         return True
 
     def JL(self):
-        print("JL")
+        # print("JL")
 
         self.IP += 2
         return True
 
     def JLE(self):
-        print("JLE")
+        # print("JLE")
 
         self.IP += 2
         return True
 
     def JG(self):
-        print("JG")
+        # print("JG")
 
         self.IP += 2
         return True
 
     def JGE(self):
-        print("JGE")
+        # print("JGE")
 
         self.IP += 2
         return True
 
     def ADD(self):
-        print("ADD")
+        # print("ADD")
 
         self.IP += 3
         return True
 
     def SUB(self):
-        print("SUB")
+        # print("SUB")
 
         self.IP += 3
         return True
 
     def MUL(self):
-        print("MUL")
+        # print("MUL")
 
         self.IP += 3
         return True
 
     def DIV(self):
-        print("DIV")
+        # print("DIV")
 
         self.IP += 3
         return True
 
     def DEC(self):
-        print("DEC")
+        # print("DEC")
 
         self.IP += 2
         return True
 
     def INC(self):
-        print("INC")
+        # print("INC")
 
         self.IP += 2
         return True
 
     def AND(self):
-        print("AND")
+        # print("AND")
 
         self.IP += 3
         return True
     
     def OR(self):
-        print("OR")
+        # print("OR")
 
         self.IP += 3
         return True
     
     def XOR(self):
-        print("XOR")
+        # print("XOR")
 
         self.IP += 3
         return True
     
     def NOT(self):
-        print("NOT")
+        # print("NOT")
 
         self.IP += 2
         return True
 
     def PUSH(self):
-        print("PUSH")
+        # print("PUSH")
 
         self.IP += 2
         return True
     
     def POP(self):
-        print("POP")
+        # print("POP")
 
         self.IP += 2
         return True
 
     def PUSHF(self):
-        print("PUSHF")
+        # print("PUSHF")
 
         self.IP += 1
         return True
     
     def POPF(self):
-        print("POPF")
+        # print("POPF")
 
         self.IP += 1
         return True
 
     def CALL(self):
-        print("CALL")
+        # print("CALL")
 
         self.IP += 2
         return True
     
     def RET(self):
-        print("RET")
+        # print("RET")
 
         self.IP += 1
         return True
 
     def SHL(self):
-        print("SHL")
+        # print("SHL")
 
         self.IP += 2
         return True
 
     def SHR(self):
-        print("SHR")
+        # print("SHR")
 
         self.IP += 2
         return True
 
     def HLT(self):
-        print("HLT")
+        # print("HLT")
 
         self.IP += 1
         return False

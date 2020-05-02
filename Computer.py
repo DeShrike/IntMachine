@@ -20,3 +20,4 @@ class Computer():
 		self.cpu.reset()
 		while self.cpu.cycle():
 			pass
+

@@ -30,14 +30,25 @@ class Debugger():
         self.showFlags("PF", self.computer.cpu.PF(), 19, 62)
         self.showFlags("IF", self.computer.cpu.IF(), 19, 67)
 
+        self.showCurrentInstruction()
+
         self.showKeys()
         print(Ansi.MoveCursor(1, 1), end = "")
 
         sys.stdout.flush()
 
+    def showCurrentInstruction(self):
+        for i in self.program.instructions:
+            if i.position == self.computer.cpu.IP:
+                disass = i.disassemble()
+                label = i.labelName if i.labelName != None else ""
+                print(Ansi.MoveCursor(1, 22) + Ansi.White + "%10s " % label, end = "")
+                print(Ansi.BrightYellow + "%04X " % i.position + Ansi.Reset + Ansi.Yellow + disass + " " + Ansi.Reset, end = "")
+                break
+
     def showRegister(self, name: str, value: int, line: int, col: int):
         print(Ansi.MoveCursor(col, line) + Ansi.GreenBackground + Ansi.BrightWhite + " %s " % name + Ansi.Reset, end = "")
-        print(" 0x" + Ansi.BrightYellow + "%04X" % value + Ansi.Reset + " (" + Ansi.BrightYellow + "%d" % value + Ansi.Reset + ")", end = "")
+        print(" 0x" + Ansi.BrightYellow + "%04X" % value + Ansi.Reset + " (" + Ansi.BrightYellow + "%5d" % value + Ansi.Reset + ")", end = "")
 
     def showFlags(self, name: str, value: bool, line: int, col: int):
         print(Ansi.MoveCursor(col, line), end = "")
