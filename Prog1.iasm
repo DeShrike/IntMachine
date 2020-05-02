@@ -17,7 +17,7 @@ String1: "This is a string", string[30]
 Input:   7, byte[1]
 Result:  0, word[1]
 
-Stack:   0x5555, word[128]
+Stack:   0x5555, word[32]
 
 CODE
 

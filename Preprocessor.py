@@ -20,7 +20,7 @@ class Preprocessor():
         pass
 
     def preprocess(self, program: Program) -> None:
-        print(f"PREPROCESSING { program.sourceFile }")
+        # print(f"PREPROCESSING { program.sourceFile }")
 
         lines = program.source.replace("\t", " ").split("\n")
 

@@ -170,7 +170,7 @@ class Assembler():
             if self.compileLine(ix, parts) == False:
                 break
 
-        print(f"PASS 1 - {len(self.program.instructions)} instructions - {len(self.program.labels)} variables")
+        # print(f"PASS 1 - {len(self.program.instructions)} instructions - {len(self.program.labels)} variables")
 
     def pass2(self) -> None:
         ''' Convert the Labels and Instructions to binary '''
@@ -219,4 +219,4 @@ class Assembler():
             b = l.getBytes()
             self.program.binary = self.program.binary + b
 
-        print(f"PASS 2 - Code Size: {codeSize} Data Size: {dataSize}")
+        # print(f"PASS 2 - Code Size: {codeSize} Data Size: {dataSize}")

@@ -1,4 +1,5 @@
 import re
+import msvcrt
 import unittest
 
 def Parse(str: str):
@@ -61,3 +62,16 @@ Test2("0x111F1")
 Test2("0y1111")
 Test2("123A")
 Test2("0x1H11")
+
+while True:
+    keycode = ord(msvcrt.getch())
+    if keycode == 27: #ESC
+        break
+    elif keycode == 13: #Enter
+        print("Enter")
+    elif keycode == 224: #Special keys (arrows, f keys, ins, del, etc.)
+        keycode = ord(msvcrt.getch())
+        if keycode == 80: #Down arrow
+            print("Arrow Down")
+        elif keycode == 72: #Up arrow
+            print("Arrow Up")

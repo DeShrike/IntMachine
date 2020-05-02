@@ -1,4 +1,5 @@
 from Computer import *
+from Debugger import *
 from Preprocessor import *
 from Assembler import *
 from Compiler import *
@@ -33,14 +34,17 @@ if __name__ == "__main__":
         #         else:
         #             print("")
 
-        for b in prog.binary:
-            print("%04X " % b, end = "")
+        # for b in prog.binary:
+        #     print("%04X " % b, end = "")
 
-        print("")
+        # print("")
 
         computer = Computer()
         computer.loadProgram(prog)
-        computer.run()
+        # computer.run()
+
+        debugger = Debugger(computer, prog)
+        debugger.run()
 
     except PreprocessorError as e:
         print(e)
