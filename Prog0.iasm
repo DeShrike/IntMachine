@@ -9,7 +9,7 @@ Stack:   0x5555, word[32]
 
 CODE
 
-MOV SP, Stack           // Initialize SP
+Main:
 
 JMP DummyLabel
 

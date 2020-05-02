@@ -285,5 +285,5 @@ class Cpu():
     def HLT(self):
         # print("HLT")
 
-        self.IP += 1
+        self.IP += 0
         return False

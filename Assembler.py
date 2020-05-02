@@ -153,6 +153,23 @@ class Assembler():
 
         return True
 
+    def addBootstrap(self):
+        instruction = instructions["JMP"].clone()
+        instruction.sourceFile = self.currentSourceFile
+        instruction.lineNumber = 0
+        param = Parameter.fromString("Main")
+        instruction.parameters.append(param)
+        self.program.instructions.insert(0, instruction)
+
+        instruction = instructions["MOV"].clone()
+        instruction.sourceFile = self.currentSourceFile
+        instruction.lineNumber = 0
+        param = Parameter.fromString("SP")
+        instruction.parameters.append(param)
+        param = Parameter.fromString("Stack")
+        instruction.parameters.append(param)
+        self.program.instructions.insert(0, instruction)
+
     def pass1(self) -> None:
         ''' Parse the lines and make Instructions and Labels '''
         
@@ -169,6 +186,8 @@ class Assembler():
             
             if self.compileLine(ix, parts) == False:
                 break
+
+        self.addBootstrap()
 
         # print(f"PASS 1 - {len(self.program.instructions)} instructions - {len(self.program.labels)} variables")
 

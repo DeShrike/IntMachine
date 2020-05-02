@@ -16,8 +16,8 @@ class Debugger():
     def updateDisplay(self):
         self.showMemory()
 
-        self.showRegister("IP", self.computer.cpu.IP, 19, 1)
-        self.showRegister("SP", self.computer.cpu.SP, 19, 21)
+        self.showRegister("IP", self.computer.cpu.IP, 19, 1, Ansi.BrightYellow)
+        self.showRegister("SP", self.computer.cpu.SP, 19, 21, Ansi.BrightMagenta)
         self.showRegister("AX", self.computer.cpu.AX, 20, 1)
         self.showRegister("BX", self.computer.cpu.BX, 20, 21)
         self.showRegister("CX", self.computer.cpu.CX, 20, 41)
@@ -43,12 +43,19 @@ class Debugger():
                 disass = i.disassemble()
                 label = i.labelName if i.labelName != None else ""
                 print(Ansi.MoveCursor(1, 22) + Ansi.White + "%10s " % label, end = "")
-                print(Ansi.BrightYellow + "%04X " % i.position + Ansi.Reset + Ansi.Yellow + disass + " " + Ansi.Reset, end = "")
+                print(Ansi.BrightYellow + "%04X " % i.position + Ansi.Reset, end = "")
+                print(Ansi.Yellow + "%-20s" % disass + " " + Ansi.Reset, end = "")
+                print(Ansi.Green + "%20s " % i.sourceFile + Ansi.Reset, end = "")
+                print("(" + Ansi.BrightGreen + "%d" % i.lineNumber + Ansi.Reset + ")  ", end = "")
+                bb = i.getBytes()
+                print(Ansi.MoveCursor(1, 23) + Ansi.ClearLine + Ansi.MoveCursor(17, 23) + Ansi.Yellow, end = "")
+                for b in bb:
+                    print("%04X " % b, end = "")
                 break
 
-    def showRegister(self, name: str, value: int, line: int, col: int):
+    def showRegister(self, name: str, value: int, line: int, col: int, color: str = Ansi.BrightWhite):
         print(Ansi.MoveCursor(col, line) + Ansi.GreenBackground + Ansi.BrightWhite + " %s " % name + Ansi.Reset, end = "")
-        print(" 0x" + Ansi.BrightYellow + "%04X" % value + Ansi.Reset + " (" + Ansi.BrightYellow + "%5d" % value + Ansi.Reset + ")", end = "")
+        print(color + " %04X" % value + Ansi.Reset + " (" + color + "%5d" % value + Ansi.Reset + ")", end = "")
 
     def showFlags(self, name: str, value: bool, line: int, col: int):
         print(Ansi.MoveCursor(col, line), end = "")
@@ -77,7 +84,7 @@ class Debugger():
                 if self.computer.cpu.IP == pos:
                     color = Ansi.BrightYellow
                 elif self.computer.cpu.SP == pos:
-                    color = Ansi.BrightWhite
+                    color = Ansi.BrightMagenta
 
                 print(Ansi.MoveCursor(c, l) + color + (" %04X " % memValue) + Ansi.Reset, end = "")
 
