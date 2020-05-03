@@ -76,21 +76,21 @@ The assembler currently supports 3 data types: word, byte and string.
 
 Examples:
 
-<code>
+```
 TheAnswer: 42, word[1]
 Greeting: "Hello world", string[30]
 OtherNumber: 7, byte[1]
 Stack: 0x5555, word[32]
-</code>
+```
 
 ## Bootstrap
 
 The assembler adds 2 instructions to the beginning of the program:
 
-<code>
+```
 MOV SP, Stack   // Initialize the stackpointer
 JMP Main        // Jump to Main
-</code>
+```
 
 ## Registers
 
@@ -192,35 +192,35 @@ HLT
 
 The value for the parameter is provided in the instruction:
 
-<code>
+```
 MOV AX, 5
 MOV AX, 0xABBA
 MOV BX, 0b10101010
 MOV CX, Variablename
-</code>
+```
 
 ### Register
 
 When the parameter is a register
 
-<code>
+```
 MOV AX, BX
 CMP AX, CX
 NOT DX
-</code>
+```
 
 ### Reference
 
 To reference memory, the address must be loaded in one of the registers, like so:
 
-<code>
+```
 MOV AX, VarialeName       // Loads the address of 'VariableName' in AX.
-</code>
+```
 
 Then that memory location can be accessed:
 
-<code>
+```
 MOV BX, [AX]              // Load the value at memorylocation [AX] in BX.
 STOR CX, [AX]             // Store the value of CX at the memory location AX is pointing at.
-</code>
+```
 
