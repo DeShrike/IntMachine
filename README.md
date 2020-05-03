@@ -1,6 +1,6 @@
 # IntMachine
 
-A virtual computer written in python, with an assembler and debugger.
+A virtual computer/CPU written in python, with an assembler and debugger.
 Has a 16 bit CPU with 4 all-purpose registers.
 Assembly language based loosely on 8086.
 Can use 64K 2-byte memory locations. 
@@ -24,7 +24,7 @@ Contains:
 
 ## Preprocessor.py
 
-Processes sourcefiles, preparing them for the assembler. This includes processing IMPORT statements.
+Preprocesses source files, preparing them for the assembler. This includes processing IMPORT statements.
 
 ## Assembler.py
 
@@ -37,8 +37,8 @@ Not implemented yet
 ## Computer.py
 
 Contains:
-- memory
-- cpu
+- Memory: 64K 2-byte words
+- CPU
 
 The computer can load a program into memory and use the CPU to execute it
 
@@ -69,6 +69,8 @@ The CPU is loosely based on the 8086 and so are the mnemonics.
 A program must have a label called Main. This is where execution will start.
 
 A program must also have a variable called Stack. The stackpointer will be pointed to that variable when execution starts.
+
+There is no guard against stack overflow, so make the stack large enough.
 
 ## Variables
 
