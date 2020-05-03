@@ -1,10 +1,11 @@
 // Very simple test program
+// Calculate Number1 * Number2 and store result in Product
 
 DATA
 
 Number1: 7, word[1]
 Number2: 6, word[1]
-
+Product: 0, word[1]
 Stack:   0x5555, word[32]
 
 CODE
@@ -19,12 +20,14 @@ POP AX
 DummyLabel:
 
 MOV AX, Number1			// Load address of Number1 in AX
-MOV CX, [AX]            // Load value of Number1 in CX
+MOV BX, [AX]            // Load value of Number1 in BX
 
-DEC CX
-INC CX
+MOV AX, Number2			// Load address of Numberé in AX
+MOV CX, [AX]            // Load value of Number2 in CX
 
-MOV AX, Number2			// Load address of Number2 in AX
-STOR CX, [AX]           // Store value of CX in memory location of Number2
+MUL CX, BX              // CX = CX * BX
+
+MOV AX, Product			// Load address of Product in AX
+STOR CX, [AX]           // Store value of CX in memory location of Product
 
 HLT

@@ -63,7 +63,7 @@ class Debugger():
 
                 print(Ansi.MoveCursor(55, 22), end ="")
                 print(Ansi.Green + "%20s " % i.sourceFile + Ansi.Reset, end = "")
-                print("(" + Ansi.BrightGreen + "%d" % i.lineNumber + Ansi.Reset + ")  ", end = "")
+                print("(" + Ansi.BrightGreen + "%d" % i.lineNumber + Ansi.Reset + ")", end = "")
                 bb = i.getBytes()
                 print(Ansi.MoveCursor(17, 23) + Ansi.Yellow, end = "")
                 for b in bb:
@@ -71,7 +71,7 @@ class Debugger():
                 break
 
     def showVariable(self, line: int, label: Label):
-        print(Ansi.MoveCursor(1, line) + Ansi.Yellow + "-> " if line == 22 else "   ", end = "")
+        print(Ansi.MoveCursor(1, line) + Ansi.Yellow + ("-> " if line == 22 else "   "), end = "")
         print(Ansi.White + "%10s " % label.name, end = "")
         print("[" + (Ansi.BrightGreen if line == 22 else Ansi.BrightWhite) + "%04X" % label.position + Ansi.Reset + Ansi.White + "] ", end = "")
         if label.datatype != None:
@@ -79,7 +79,7 @@ class Debugger():
 
         print(Ansi.MoveCursor(55, line), end ="")
         print(Ansi.Green + "%20s " % label.sourceFile + Ansi.Reset, end = "")
-        print("(" + Ansi.BrightGreen + "%d" % label.lineNumber + Ansi.Reset + ")  ", end = "")
+        print("(" + Ansi.BrightGreen + "%d" % label.lineNumber + Ansi.Reset + ")", end = "")
 
     def showVariables(self):
         print(Ansi.MoveCursor(1, 22) + Ansi.ClearLine, end = "")

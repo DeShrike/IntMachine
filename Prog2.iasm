@@ -1,0 +1,35 @@
+// Testing the STACK.
+
+DATA
+
+Stack:        0x5555, word[32]
+
+CODE
+
+Main:
+
+MOV AX, 1
+MOV BX, 2
+MOV CX, 3
+MOV DX, 4
+
+PUSH AX
+PUSH BX
+PUSH CX
+PUSH DX
+
+PUSHF
+
+MOV AX, 100
+MOV BX, 200
+MOV CX, 300
+MOV DX, 400
+
+POPF
+
+POP DX
+POP CX
+POP BX
+POP AX
+
+HLT
