@@ -1,0 +1,37 @@
+// Testing DEC, INC, CMP and JZ and JNZ.
+
+DATA
+
+Stack:        0x5555, word[32]
+
+CODE
+
+Main:
+
+MOV AX, 20
+
+Loop: 
+
+DEC AX
+JNZ Loop
+MOV BX, 20
+
+Loop2:
+
+DEC BX
+JZ Part3
+JMP Loop2
+
+Part3:
+
+MOV CX, 0
+
+Loop3:
+
+INC CX
+CMP CX, 20
+JNZ Loop3
+
+Done:
+
+HLT

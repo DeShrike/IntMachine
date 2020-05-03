@@ -78,22 +78,58 @@ class Cpu():
         self.FLAGS = 0
 
     def SF(self) -> bool:
-        return self.FLAGS & 0b000001 == 0b000001
+        return (self.FLAGS & 0b000001) == 0b000001
 
     def OF(self) -> bool:
-        return self.FLAGS & 0b000010 == 0b000010
+        return (self.FLAGS & 0b000010) == 0b000010
 
     def ZF(self) -> bool:
-        return self.FLAGS & 0b000100 == 0b000100
+        return (self.FLAGS & 0b000100) == 0b000100
 
     def CF(self) -> bool:
-        return self.FLAGS & 0b001000 == 0b001000
+        return (self.FLAGS & 0b001000) == 0b001000
 
     def PF(self) -> bool:
-        return self.FLAGS & 0b010000 == 0b010000
+        return (self.FLAGS & 0b010000) == 0b010000
 
     def IF(self) -> bool:
-        return self.FLAGS & 0b100000 == 0b100000
+        return (self.FLAGS & 0b100000) == 0b100000
+
+    def setSF(self, value: bool):
+        if value:
+            self.FLAGS = self.FLAGS | 0b000001
+        else:
+            self.FLAGS = self.FLAGS & 0b111110
+
+    def setOF(self, value: bool):
+        if value:
+            self.FLAGS = self.FLAGS | 0b000010
+        else:
+            self.FLAGS = self.FLAGS & 0b111101
+
+    def setZF(self, value: bool):
+        if value:
+            self.FLAGS = self.FLAGS | 0b000100
+        else:
+            self.FLAGS = self.FLAGS & 0b111011
+
+    def setCF(self, value: bool):
+        if value:
+            self.FLAGS = self.FLAGS | 0b001000
+        else:
+            self.FLAGS = self.FLAGS & 0b110111
+
+    def setPF(self, value: bool):
+        if value:
+            self.FLAGS = self.FLAGS | 0b010000
+        else:
+            self.FLAGS = self.FLAGS & 0b101111
+
+    def setIF(self, value: bool):
+        if value:
+            self.FLAGS = self.FLAGS | 0b100000
+        else:
+            self.FLAGS = self.FLAGS & 0b011111
 
     def cycle(self) -> bool:
         i = self.memory[self.IP]
@@ -184,6 +220,17 @@ class Cpu():
     def CMP(self):
         # print("CMP")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("CMP: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("STOR: Bad Parameter 2", self.IP)
+
+        value1 = self.determineValue(self.parameter1Mode, self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        self.setZF(value1 == value2)
+
         self.IP += 3
         return True
 
@@ -193,7 +240,7 @@ class Cpu():
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JZ: Bad Parameter 1", self.IP)
 
-        if self.ZF == True:
+        if self.ZF() == True:
             self.IP = self.memory[self.IP + 1]
         else:
             self.IP += 2
@@ -206,7 +253,7 @@ class Cpu():
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JNZ: Bad Parameter 1", self.IP)
 
-        if self.ZF == False:
+        if self.ZF() == False:
             self.IP = self.memory[self.IP + 1]
         else:
             self.IP += 2
@@ -219,7 +266,7 @@ class Cpu():
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JO: Bad Parameter 1", self.IP)
 
-        if self.OF == True:
+        if self.OF() == True:
             self.IP = self.memory[self.IP + 1]
         else:
             self.IP += 2
@@ -232,7 +279,7 @@ class Cpu():
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JNO: Bad Parameter 1", self.IP)
 
-        if self.OF == False:
+        if self.OF() == False:
             self.IP = self.memory[self.IP + 1]
         else:
             self.IP += 2
@@ -245,7 +292,7 @@ class Cpu():
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JC: Bad Parameter 1", self.IP)
 
-        if self.CF == True:
+        if self.CF() == True:
             self.IP = self.memory[self.IP + 1]
         else:
             self.IP += 2
@@ -258,7 +305,7 @@ class Cpu():
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JC: Bad Parameter 1", self.IP)
 
-        if self.CF == False:
+        if self.CF() == False:
             self.IP = self.memory[self.IP + 1]
         else:
             self.IP += 2
@@ -316,11 +363,30 @@ class Cpu():
     def DEC(self):
         # print("DEC")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("DEC: Bad Parameter 1", self.IP)
+        
+        param1 = self.memory[self.IP + 1]
+        value = self.getRegister(param1)
+        value = value - 1
+        self.setZF(value == 0)
+        self.setRegister(param1, value)
+
         self.IP += 2
         return True
 
     def INC(self):
         # print("INC")
+
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("INC: Bad Parameter 1", self.IP)
+        
+        param1 = self.memory[self.IP + 1]
+        value = self.getRegister(param1)
+        value = value + 1
+        self.setZF(value == 0)
+        self.setCF(value == 0x10000)
+        self.setRegister(param1, value)
 
         self.IP += 2
         return True
