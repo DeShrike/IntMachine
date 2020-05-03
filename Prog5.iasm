@@ -1,0 +1,49 @@
+// Testing ADD and SUB.
+
+DATA
+
+Stack:     0x5555, word[32]
+ResultADD1: 0, word[1]       // Should be 362 (0x016A)
+ResultADD2: 0, word[1]       // Should be 35801 (0x8BD9)
+ResultSUB1: 0, word[1]       // SHould be 62 (0x003E)
+ResultSUB2: 0, word[1]       // SHould be 11111 (0x2B67)
+
+CODE
+
+Main:
+
+NOP
+
+Adding:
+
+MOV AX, 0b11010100
+MOV BX, 0b10010110
+ADD AX, BX
+
+MOV DX, ResultADD1
+STOR AX, [DX]
+
+MOV AX, 12345
+MOV BX, 23456
+ADD AX, BX
+
+MOV DX, ResultADD2
+STOR AX, [DX]
+
+Subtracting:
+
+MOV AX, 0b11010100
+MOV BX, 0b10010110
+SUB AX, BX
+
+MOV DX, ResultSUB1
+STOR AX, [DX]
+
+MOV AX, 23456
+MOV BX, 12345
+SUB AX, BX
+
+MOV DX, ResultSUB2
+STOR AX, [DX]
+
+HLT

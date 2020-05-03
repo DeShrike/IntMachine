@@ -79,6 +79,7 @@ instructions = {
     "SHL": Instruction("SHL", 0x0040, 1),
     "SHR": Instruction("SHR", 0x0041, 1),
 
+    "NOP": Instruction("NOP", 0x00EE, 0),
     "HLT": Instruction("HLT", 0x00FF, 0) 
 }
 

@@ -32,4 +32,15 @@ POP CX
 POP BX
 POP AX
 
+CALL Function
+
+MOV BX, 0xFFEE
+
 HLT
+
+Function:
+
+MOV AX, 12345
+
+RET
+

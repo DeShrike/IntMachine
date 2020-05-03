@@ -65,6 +65,7 @@ class Cpu():
             0x0040: self.SHL,
             0x0041: self.SHR,
 
+            0x00EE: self.NOP,
             0x00FF: self.HLT
         }
 
@@ -180,6 +181,7 @@ class Cpu():
     
     def JMP(self):
         # print("JMP")
+
         if self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("JMP: Bad Parameter 1", self.IP)
 
@@ -203,7 +205,7 @@ class Cpu():
     def STOR(self):
         # print("STOR")
 
-        if self.parameter1Mode != self.REGISTER:
+        if self.parameter1Mode != self.REGISTER and self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("STOR: Bad Parameter 1", self.IP)
 
         if self.parameter2Mode != self.REFERENCE:
@@ -224,7 +226,7 @@ class Cpu():
             raise ExcecutionError("CMP: Bad Parameter 1", self.IP)
 
         if self.parameter2Mode == self.REFERENCE:
-            raise ExcecutionError("STOR: Bad Parameter 2", self.IP)
+            raise ExcecutionError("CMP: Bad Parameter 2", self.IP)
 
         value1 = self.determineValue(self.parameter1Mode, self.memory[self.IP + 1])
         value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
@@ -339,17 +341,64 @@ class Cpu():
     def ADD(self):
         # print("ADD")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("ADD: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("ADD: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        value1 += value2
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setZF(value1 == 0)
+        self.setOF(value1 > 0xFFFF)
+
         self.IP += 3
         return True
 
     def SUB(self):
         # print("SUB")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("SUB: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("SUB: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        value1 -= value2
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setZF(value1 == 0)
+
         self.IP += 3
         return True
 
     def MUL(self):
         # print("MUL")
+
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("MUL: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("MUL: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        value1 *= value2
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setZF(value1 == 0)
+        self.setOF(value1 > 0xFFFF)
 
         self.IP += 3
         return True
@@ -394,17 +443,62 @@ class Cpu():
     def AND(self):
         # print("AND")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("AND: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("AND: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        value1 = value1 & value2
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setZF(value1 == 0)
+
         self.IP += 3
         return True
     
     def OR(self):
         # print("OR")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("OR: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("OR: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        value1 = value1 | value2
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setZF(value1 == 0)
+
         self.IP += 3
         return True
     
     def XOR(self):
         # print("XOR")
+
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("XOR: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("XOR: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        value1 = value1 ^ value2
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setZF(value1 == 0)
 
         self.IP += 3
         return True
@@ -418,11 +512,25 @@ class Cpu():
     def PUSH(self):
         # print("PUSH")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("PUSH: Bad Parameter 1", self.IP)
+
+        value = self.getRegister(self.memory[self.IP + 1])
+        self.memory[self.SP] = value
+        self.SP += 1
+
         self.IP += 2
         return True
     
     def POP(self):
         # print("POP")
+
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("POP: Bad Parameter 1", self.IP)
+
+        self.SP -= 1
+        value = self.memory[self.SP]
+        self.setRegister(self.memory[self.IP + 1], value)
 
         self.IP += 2
         return True
@@ -430,11 +538,17 @@ class Cpu():
     def PUSHF(self):
         # print("PUSHF")
 
+        self.memory[self.SP] = self.FLAGS
+        self.SP += 1
+
         self.IP += 1
         return True
     
     def POPF(self):
         # print("POPF")
+
+        self.SP -= 1
+        self.FLAGS = self.memory[self.SP]
 
         self.IP += 1
         return True
@@ -442,13 +556,22 @@ class Cpu():
     def CALL(self):
         # print("CALL")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("CALL: Bad Parameter 1", self.IP)
+
+        self.memory[self.SP] = self.IP + 2
+        self.SP += 1
+
+        self.IP = self.memory[self.IP + 1]
+
         return True
     
     def RET(self):
         # print("RET")
 
-        self.IP += 1
+        self.SP -= 1
+        self.IP = self.memory[self.SP]
+
         return True
 
     def SHL(self):
@@ -461,6 +584,12 @@ class Cpu():
         # print("SHR")
 
         self.IP += 2
+        return True
+
+    def NOP(self):
+        # print("NOP")
+
+        self.IP += 1
         return True
 
     def HLT(self):

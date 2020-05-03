@@ -6,6 +6,14 @@ CODE
 
 // Calculates Factorial(AX) -> BX
 
+
+// def Factorion(v):
+//    if v == 1:
+//        return 1
+//    if v == 0:
+//        return 1
+//    return v * Factorial(v - 1)
+
 Factorial:
 
 PUSH CX
@@ -16,11 +24,15 @@ JZ Return1
 CMP AX, 1
 JZ Return1
 
+PUSH AX
+
 DEC AX          // AX = AX - 1
-MOV CX, BX
+
 CALL Factorial
 
-MUL BX, CX      // BX = BX * CX
+POP AX
+MUL BX, AX
+
 JMP Return
 
 Return1:

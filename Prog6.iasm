@@ -1,0 +1,36 @@
+// This programs calculates 7! and 8!
+// BX = Factorial(AX)
+
+IMPORT Lib.iasm
+
+DATA
+
+Input1:  7, byte[1]        // Calculate 7!
+Input2:  8, byte[1]        // Calculate 8!
+
+Result1: 0, word[1]        // Should be 5040 (0x13B0)
+Result2: 0, word[1]        // Should be 40320 (0x9D80)
+
+Stack:   0x5555, word[24]  // This program uses 23 stack spaces.
+
+CODE
+
+Main:
+
+MOV BX, Input1	        // Load address of Input1 in BX
+MOV AX, [BX]            // Load value of Input1 in AX
+
+CALL Factorial          // Call Factorial(AX). Result will be in BX
+
+MOV DX, Result1         // Load address of Result1 in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result1
+
+MOV BX, Input2	        // Load address of Input2 in BX
+MOV AX, [BX]            // Load value of Input2 in AX
+
+CALL Factorial          // Call Factorial(AX). Result will be in BX
+
+MOV DX, Result2         // Load address of Result2 in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result2
+
+HLT

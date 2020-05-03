@@ -11,7 +11,7 @@ from Cpu import *
 if __name__ == "__main__":
 
     try:
-        prog = Program("Prog3.iasm")
+        prog = Program("Prog6.iasm")
 
         preproc = Preprocessor()
         preproc.preprocess(prog)

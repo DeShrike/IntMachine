@@ -2,13 +2,20 @@
 
 DATA
 
-Stack:        0x5555, word[32]
+Stack:     0x5555, word[32]
+TheNumber: 0xAAAA, word[5]
 
 CODE
 
 Main:
 
+MOV DX, TheNumber
+STOR 99, [DX]
+
 MOV AX, 20
+MOV BX, AX
+MOV CX, AX
+MOV DX, AX
 
 Loop: 
 
@@ -33,5 +40,16 @@ CMP CX, 20
 JNZ Loop3
 
 Done:
+
+MOV DX, TheNumber
+STOR CX, [DX]
+INC DX
+STOR CX, [DX]
+INC DX
+STOR CX, [DX]
+INC DX
+STOR CX, [DX]
+INC DX
+STOR CX, [DX]
 
 HLT

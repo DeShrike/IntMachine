@@ -1,10 +1,5 @@
 // This programs adds 2 numbers:
-// Sum = Number1 + Number 2
-
-// And then calculates a Factorial
-// Result = Factorial(Input)
-
-IMPORT Lib.iasm
+// Sum = Number1 + Number2
 
 DATA
 
@@ -13,9 +8,6 @@ Number2:      6, word[1]
 Sum:          0, word[1]
 
 String1:      "This is a string", string[30]
-
-LongVariable: 7, byte[1]
-Result:       0, word[1]
 
 Stack:        0x5555, word[32]
 
@@ -36,17 +28,9 @@ Loop:
 ADD AX, CX				// Add CX (Number1) to AX
 DEC DX					// Decrease DX by 1
 
-JZ Loop 				// JUMP if not ZERO
+JNZ Loop 				// JUMP if not ZERO
 
 MOV	DX, Sum				// Store address of Sum in DX
 STOR AX, [DX]           // Store value of AX in memory location of Sum
-
-MOV BX, LongVariable	// Load address of Input in BX
-MOV AX, [BX]            // Load value of Input in AX
-
-CALL Factorial          // Call Factorial(AX). Result will be in BX
-
-MOV DX, Result          // Load address of Result in DX
-STOR BX, [DX]           // Store value of BX in memory location of Result
 
 HLT

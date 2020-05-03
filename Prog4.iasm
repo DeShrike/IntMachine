@@ -1,0 +1,43 @@
+// Testing AND, OR, XOR.
+
+DATA
+
+Stack:     0x5555, word[32]
+ResultAND: 0, word[1]       // Should be 0b10010100 (0x0094)
+ResultOR:  0, word[1]       // Should be 0b11010110 (0x00D6)
+ResultXOR: 0, word[1]       // SHould be 0b01000010 (0x0042)
+
+CODE
+
+Main:
+
+NOP
+
+And:
+
+MOV AX, 0b10010110
+MOV BX, 0b11010100
+AND AX, BX
+
+MOV DX, ResultAND
+STOR AX, [DX]
+
+Or:
+
+MOV AX, 0b10010110
+MOV BX, 0b11010100
+OR AX, BX
+
+MOV DX, ResultOR
+STOR AX, [DX]
+
+Xor:
+
+MOV AX, 0b10010110
+MOV BX, 0b11010100
+XOR AX, BX
+
+MOV DX, ResultXOR
+STOR AX, [DX]
+
+HLT
