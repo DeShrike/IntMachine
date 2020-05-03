@@ -8,6 +8,8 @@ class Label():
         self.size = size
         self.value = value
         self.position = 0
+        self.sourceFile = ""
+        self.lineNumber = 0
 
     def __repr__(self) -> str:
         if self.datatype == "string":

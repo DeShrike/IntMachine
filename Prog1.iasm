@@ -8,16 +8,16 @@ IMPORT Lib.iasm
 
 DATA
 
-Number1: 7, word[1]
-Number2: 6, word[1]
-Sum:     0, word[1]
+Number1:      7, word[1]
+Number2:      6, word[1]
+Sum:          0, word[1]
 
-String1: "This is a string", string[30]
+String1:      "This is a string", string[30]
 
-Input:   7, byte[1]
-Result:  0, word[1]
+LongVariable: 7, byte[1]
+Result:       0, word[1]
 
-Stack:   0x5555, word[32]
+Stack:        0x5555, word[32]
 
 CODE
 
@@ -41,7 +41,7 @@ JZ Loop 				// JUMP if not ZERO
 MOV	DX, Sum				// Store address of Sum in DX
 STOR AX, [DX]           // Store value of AX in memory location of Sum
 
-MOV BX, Input			// Load address of Input in BX
+MOV BX, LongVariable	// Load address of Input in BX
 MOV AX, [BX]            // Load value of Input in AX
 
 CALL Factorial          // Call Factorial(AX). Result will be in BX

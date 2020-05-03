@@ -74,7 +74,7 @@ class Assembler():
                 if self.block != "CODE":
                     raise AssemblerError("Label declaration not in CODE block", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-                self.lastLabel = part0
+                self.lastLabel = part0[:10]
 
             elif partCount == 3:
                 if self.block != "DATA":
@@ -107,7 +107,10 @@ class Assembler():
             else:
                 raise AssemblerError("Syntax error", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-            label = Label(part0, datatype, size, value) 
+            label = Label(part0[:10], datatype, size, value)
+            label.lineNumber = self.currentLineNumber + lineNumber
+            label.sourceFile = self.currentSourceFile
+            
             self.program.labels.append(label)
 
         elif part0 == "CODE":

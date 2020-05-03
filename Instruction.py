@@ -43,5 +43,10 @@ class Instruction():
 		return b
 
 	def disassemble(self) -> str:
-		return self.mnemonic
+		disass = self.mnemonic + " "
+		if len(self.parameters) >= 1:
+			disass = disass + self.parameters[0].disassemble()
+		if len(self.parameters) >= 2:
+			disass = disass + ", " + self.parameters[1].disassemble()
 
+		return disass

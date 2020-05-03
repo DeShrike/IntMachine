@@ -85,6 +85,10 @@ OtherNumber: 7, byte[1]
 Stack: 0x5555, word[32]
 ```
 
+Currently there is no variable scope; all variables are global.
+
+Variable names are truncated to 10 characters.
+
 ## Bootstrap
 
 The assembler adds 2 instructions to the beginning of the program:
@@ -216,7 +220,7 @@ NOT DX
 To reference memory, the address must be loaded in one of the registers, like so:
 
 ```
-MOV AX, VarialeName       // Loads the address of 'VariableName' in AX.
+MOV AX, VariableName       // Loads the address of 'VariableName' in AX.
 ```
 
 Then that memory location can be accessed:
