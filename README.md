@@ -98,6 +98,8 @@ IP : Instruction pointer
 
 SP : Stack pointer
 
+IX : Index register
+
 AX
 
 BX
@@ -122,14 +124,14 @@ IF : Interrupt flag (Not used yet)
 
 ## Instructions
 
-### JMP
+#### JMP
 
 Unconditional jump
 ```
 JMP Labelname
 ```
 
-### MOV
+#### MOV
 
 Move values to registers
 ```
@@ -141,7 +143,7 @@ MOV AX, [BX]
 MOV BX, Labelname
 ```
 
-### STOR
+#### STOR
 
 Set memorylocation to a value
 
@@ -150,11 +152,11 @@ STOR 123, [AX]
 STOR BX, [CX]
 ```
 
-### CALL
+#### CALL
 
-### RET
+#### RET
 
-### PUSH
+#### PUSH
 
 Push a value on the stack
 
@@ -163,7 +165,7 @@ PUSH AX
 PUSH BX
 ```
 
-### POP
+#### POP
 
 Pop  a value from the stack
 
@@ -172,7 +174,7 @@ POP BX
 POP AX
 ```
 
-### PUSHF
+#### PUSHF
 
 Push the flags to the stack
 
@@ -180,7 +182,7 @@ Push the flags to the stack
 PUSHF
 ```
 
-### POPF
+#### POPF
 
 Pop the flags from the stack
 
@@ -188,55 +190,55 @@ Pop the flags from the stack
 POPF
 ```
 
-### ADD
+#### ADD
 
-### SUB
+#### SUB
 
-### MUL
+#### MUL
 
-### DIV
+#### DIV
 
-### AND
+#### AND
 
-### OR
+#### OR
 
-### XOR
+#### XOR
 
-### NOT
+#### NOT
 
-### DEC
+#### DEC
 
-### INC
+#### INC
 
-### SHL
+#### SHL
 
-### SHR
+#### SHR
 
-### JZ
+#### JZ
 
-### JNZ
+#### JNZ
 
-### JO
+#### JO
 
-### JNO
+#### JNO
 
-### JC
+#### JC
 
-### JNC
+#### JNC
 
-### JL
+#### JL
 
-### JLE
+#### JLE
 
-### JG
+#### JG
 
-### JGE
+#### JGE
 
-### NOP
+#### NOP
 
 No operation. Does nothing.
 
-### HLT
+#### HLT
 
 Halts the CPU.
 
