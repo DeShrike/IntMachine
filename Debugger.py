@@ -183,7 +183,7 @@ class Debugger():
                 self.updateDisplay()
             elif ch == ord("F") or ch == ord("f"):
                 delayTime = self.FAST
-            elif ch == ord("w") or ch == ord("w"):
+            elif ch == ord("W") or ch == ord("w"):
                 delayTime = self.SLOW
             elif ch == ord("T") or ch == ord("t"):
                 self.computer.cpu.reset()

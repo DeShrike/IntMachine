@@ -5,13 +5,7 @@ Has a 16 bit CPU with 4 all-purpose registers.
 Assembly language based loosely on 8086.
 Can use 64K 2-byte memory locations. 
 
-# Roadmap
-
-- Add support for floating point instructions.
-- Add some kind of output device.
-- Add support for input.
-- Write a library with common functions.
-- Add a compiler that can compile (transpile ?) a higher level language to assembly sourcecode.
+![Debugger Screenshot](IntMachineDebugger.png)
 
 # Source Code
 
@@ -230,3 +224,10 @@ MOV BX, [AX]              // Load the value at memorylocation [AX] in BX.
 STOR CX, [AX]             // Store the value of CX at the memory location AX is pointing at.
 ```
 
+# Roadmap
+
+- Add support for floating point instructions.
+- Add some kind of output device.
+- Add support for input.
+- Write a library with common functions.
+- Add a compiler that can compile (transpile ?) a higher level language to assembly sourcecode.
