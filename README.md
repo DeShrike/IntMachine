@@ -43,3 +43,4 @@ Can execute intcode instructions from memorys
 
 Displays memory contents, CPU registers and flags, current intruction and variables. 
 Allows executing a program step by step.
+
