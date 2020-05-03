@@ -7,13 +7,15 @@ class Cpu():
     DIRECT = 10
     REGISTER = 11
     REFERENCE = 12
+    INDEXED = 13
 
     REGAX = 1
     REGBX = 2
     REGCX = 3
     REGDX = 4
-    REGIP = 15
+    REGIX = 13
     REGSP = 14
+    REGIP = 15
 
     def __init__(self, memory: List[int]):
         self.memory = memory
@@ -74,6 +76,7 @@ class Cpu():
         self.BX = 0
         self.CX = 0
         self.DX = 0
+        self.IX = 0
         self.SP = 0
         self.IP = 0
         self.FLAGS = 0
@@ -149,6 +152,8 @@ class Cpu():
             self.CX = value
         elif reg == self.REGDX:
             self.DX = value
+        elif reg == self.REGIX:
+            self.IX = value
         elif reg == self.REGIP:
             self.IP = value
         elif reg == self.REGSP:
@@ -163,6 +168,8 @@ class Cpu():
             return self.CX
         elif reg == self.REGDX:
             return self.DX
+        elif reg == self.REGIX:
+            return self.IX
         elif reg == self.REGIP:
             return self.IP
         elif reg == self.REGSP:
@@ -177,6 +184,9 @@ class Cpu():
         elif paramMode == self.REFERENCE:
             regValue = self.getRegister(memValue)
             return self.memory[regValue]
+        elif paramMode == self.INDEXED:
+            regValue = self.getRegister(memValue)
+            return self.memory[regValue + self.IX]
         return -1    
     
     def JMP(self):
@@ -329,11 +339,27 @@ class Cpu():
     def JG(self):
         # print("JG")
 
+        # if self.parameter1Mode != self.DIRECT:
+        #     raise ExcecutionError("JG: Bad Parameter 1", self.IP)
+
+        # if self.ZF() == True and self.OF() == self.SF():
+        #     self.IP = self.memory[self.IP + 1]
+        # else:
+        #     self.IP += 2
+
         self.IP += 2
         return True
 
     def JGE(self):
         # print("JGE")
+
+        # if self.parameter1Mode != self.DIRECT:
+        #     raise ExcecutionError("JNG: Bad Parameter 1", self.IP)
+
+        # if self.ZF() == True and self.OF() == self.SF():
+        #     self.IP = self.memory[self.IP + 1]
+        # else:
+        #     self.IP += 2
 
         self.IP += 2
         return True
@@ -405,6 +431,21 @@ class Cpu():
 
     def DIV(self):
         # print("DIV")
+
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("MUL: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode == self.REFERENCE:
+            raise ExcecutionError("MUL: Bad Parameter 2", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
+
+        r = value1 % value2
+        q = value1 // value2
+
+        self.setRegister(self.memory[self.IP + 1], q)
+        self.setRegister(Definitions.registers["DX"], r)
 
         self.IP += 3
         return True
@@ -577,17 +618,39 @@ class Cpu():
     def SHL(self):
         # print("SHL")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("SHL: Bad Parameter 1", self.IP)
+        
+        param1 = self.memory[self.IP + 1]
+        value = self.getRegister(param1)
+        value = value << 1
+        self.setZF(value == 0)
+        self.setCF(value > 0xFFFF)
+        self.setRegister(param1, value)
+
         self.IP += 2
         return True
 
     def SHR(self):
         # print("SHR")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("SHR: Bad Parameter 1", self.IP)
+        
+        param1 = self.memory[self.IP + 1]
+        value = self.getRegister(param1)
+        value = value >> 1
+        self.setZF(value == 0)
+        self.setCF(value > 0xFFFF)
+        self.setRegister(param1, value)
+
         self.IP += 2
         return True
 
     def NOP(self):
         # print("NOP")
+
+        # NOP : Nothing to do !
 
         self.IP += 1
         return True

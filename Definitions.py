@@ -11,7 +11,8 @@ STOR AX, [BX]	reg, ref
 addressingModes = { 
     "direct": 10,
     "register": 11,
-    "reference": 12
+    "reference": 12,
+    "indexed": 13
 }
 
 registers = {
@@ -19,6 +20,7 @@ registers = {
     "BX": 2,
     "CX": 3,
     "DX": 4,
+    "IX": 13,
     "SP": 14,
     "IP": 15,
 }
@@ -38,7 +40,7 @@ instructions = {
     "ADD": Instruction("ADD", 0x0012, 2),
     "SUB": Instruction("SUB", 0x0013, 2),
     "MUL": Instruction("MUL", 0x0014, 2),
-    "DIV": Instruction("DIV", 0x0015, 2),
+    "DIV": Instruction("DIV", 0x0015, 2),   # param1 = param1 / param2, Integer division, remainder in DX
 
     "JMP": Instruction("JMP", 0x0016, 1),
 

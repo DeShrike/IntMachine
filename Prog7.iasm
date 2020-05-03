@@ -1,0 +1,66 @@
+// This programs calculates 7! and 8!
+// BX = Factorial(AX)
+
+IMPORT Lib.iasm
+
+DATA
+
+Input1: 7,    byte[1]        // Check if 7 is prime.
+Input2: 1541, byte[1]        // Check if 1541 is prime. (23 * 67)
+Input3: 9967, byte[1]        // Check if 9967 is prime.
+Input4: 18,   byte[1]        // Check if 18 is prime.
+
+Result1: 0, word[1]        // Should be 1
+Result2: 0, word[1]        // Should be 0
+Result3: 0, word[1]        // Should be 1
+Result4: 0, word[1]        // Should be 0
+
+Stack:   0x5555, word[16]
+
+CODE
+
+Main:
+
+///////////////////////////////////////////////////////////////////////////////
+
+MOV BX, Input1	        // Load address of Input1 in BX
+MOV AX, [BX]            // Load value of Input1 in AX
+
+CALL IsPrime            // Result will be in BX
+
+MOV DX, Result1         // Load address of Result1 in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result1
+
+///////////////////////////////////////////////////////////////////////////////
+
+MOV BX, Input2	        // Load address of Input2 in BX
+MOV AX, [BX]            // Load value of Input2 in AX
+
+CALL IsPrime            // Result will be in BX
+
+MOV DX, Result2         // Load address of Result2 in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result2
+
+///////////////////////////////////////////////////////////////////////////////
+
+MOV BX, Input3	        // Load address of Input3 in BX
+MOV AX, [BX]            // Load value of Input3 in AX
+
+CALL IsPrime            // Result will be in BX
+
+MOV DX, Result3         // Load address of Result3 in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result3
+
+///////////////////////////////////////////////////////////////////////////////
+
+MOV BX, Input4	        // Load address of Input4 in BX
+MOV AX, [BX]            // Load value of Input4 in AX
+
+CALL IsPrime            // Result will be in BX
+
+MOV DX, Result4         // Load address of Result4 in DX
+STOR BX, [DX]           // Store value of BX in memory location of Result4
+
+///////////////////////////////////////////////////////////////////////////////
+
+HLT

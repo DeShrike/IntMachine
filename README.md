@@ -184,6 +184,8 @@ JG
 
 JGE
 
+NOP
+
 HLT
 
 ## Addressing modes

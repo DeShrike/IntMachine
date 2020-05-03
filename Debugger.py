@@ -32,18 +32,20 @@ class Debugger():
         self.showMemory()
 
         self.showRegister("IP", self.computer.cpu.IP, 19, 1, Ansi.BrightYellow)
-        self.showRegister("SP", self.computer.cpu.SP, 19, 21, Ansi.BrightMagenta)
-        self.showRegister("AX", self.computer.cpu.AX, 20, 1)
-        self.showRegister("BX", self.computer.cpu.BX, 20, 21)
-        self.showRegister("CX", self.computer.cpu.CX, 20, 41)
-        self.showRegister("DX", self.computer.cpu.DX, 20, 61)
+        self.showRegister("SP", self.computer.cpu.SP, 19, 19, Ansi.BrightMagenta)
+        self.showRegister("IX", self.computer.cpu.IX, 19, 37)
 
-        self.showFlags("SF", self.computer.cpu.SF(), 19, 42)
-        self.showFlags("OF", self.computer.cpu.OF(), 19, 47)
-        self.showFlags("ZF", self.computer.cpu.ZF(), 19, 52)
-        self.showFlags("CF", self.computer.cpu.CF(), 19, 57)
-        self.showFlags("PF", self.computer.cpu.PF(), 19, 62)
-        self.showFlags("IF", self.computer.cpu.IF(), 19, 67)
+        self.showRegister("AX", self.computer.cpu.AX, 20, 1)
+        self.showRegister("BX", self.computer.cpu.BX, 20, 19)
+        self.showRegister("CX", self.computer.cpu.CX, 20, 37)
+        self.showRegister("DX", self.computer.cpu.DX, 20, 55)
+
+        self.showFlags("SF", self.computer.cpu.SF(), 19, 57)
+        self.showFlags("OF", self.computer.cpu.OF(), 19, 62)
+        self.showFlags("ZF", self.computer.cpu.ZF(), 19, 67)
+        self.showFlags("CF", self.computer.cpu.CF(), 19, 72)
+        self.showFlags("PF", self.computer.cpu.PF(), 19, 77)
+        self.showFlags("IF", self.computer.cpu.IF(), 20, 77)
 
         self.showKeys()
         print(Ansi.MoveCursor(1, 1), end = "")
@@ -138,8 +140,7 @@ class Debugger():
                     color = Ansi.BrightYellow
                 elif self.computer.cpu.SP == pos:
                     color = Ansi.BrightMagenta
-
-                if self.mode == self.VARIABLEMODE and pos >= self.currentVariableStart and pos < self.currentVariableStart + self.currectVariableSize:
+                elif self.mode == self.VARIABLEMODE and pos >= self.currentVariableStart and pos < self.currentVariableStart + self.currectVariableSize:
                     color = Ansi.BrightGreen
 
                 print(Ansi.MoveCursor(c, l) + color + (" %04X " % memValue) + Ansi.Reset, end = "")

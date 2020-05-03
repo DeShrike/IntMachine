@@ -17,6 +17,16 @@ CODE
 
 Main:
 
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+
+
 MOV BX, Input1	        // Load address of Input1 in BX
 MOV AX, [BX]            // Load value of Input1 in AX
 

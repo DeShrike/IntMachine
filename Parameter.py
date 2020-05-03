@@ -7,6 +7,7 @@ class Parameter():
     DIRECT = "direct"
     REF = "reference"
     REGISTER = "register"
+    INDEXED = "indexed"
 
     def __init__(self, mode: int, value: int):
         self.mode = mode
@@ -31,6 +32,10 @@ class Parameter():
         return cls(Definitions.addressingModes[cls.REF], register)
 
     @classmethod
+    def fromIndexed(cls, register: int) -> "Parameter":
+        return cls(Definitions.addressingModes[cls.INDEXED], register)
+
+    @classmethod
     def fromRegister(cls, register: int) -> "Parameter":
         return cls(Definitions.addressingModes[cls.REGISTER], register)
 
@@ -39,7 +44,11 @@ class Parameter():
         if val in Definitions.registers:
             return Parameter.fromRegister(Definitions.registers[val])
 
-        if re.match("^\\[([A-D]X|SP|IP)\\]$", val):
+        if re.match("^\\[([A-D]X|SP|IP|IX)+IX\\]$", val):
+            val = val[1:-1]
+            return Parameter.fromIndexed(Definitions.registers[val])
+
+        if re.match("^\\[([A-D]X|SP|IP|IX)\\]$", val):
             val = val[1:-1]
             return Parameter.fromRef(Definitions.registers[val])
 
@@ -69,6 +78,8 @@ class Parameter():
             disass = Parameter.findRegister(self.value)
         elif self.mode == Definitions.addressingModes[self.REF]:
             disass = "[" + Parameter.findRegister(self.value) + "]"
+        elif self.mode == Definitions.addressingModes[self.INDEXED]:
+            disass = "[" + Parameter.findRegister(self.value) + "+IX]"
         else:
             disass = "(ERROR)"
         return disass
