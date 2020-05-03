@@ -238,9 +238,17 @@ POPF
 
 No operation. Does nothing.
 
+```
+NOP
+```
+
 #### HLT
 
 Halts the CPU.
+
+```
+HLT
+```
 
 ## Addressing modes
 
@@ -278,6 +286,13 @@ Then that memory location can be accessed:
 ```
 MOV BX, [AX]              // Load the value at memorylocation [AX] in BX.
 STOR CX, [AX]             // Store the value of CX at the memory location AX is pointing at.
+```
+
+### Indexed
+
+```
+MOV BX, [AX+IX]           // Load the value at memorylocation [AX+IX] in BX.
+STOR CX, [AX+IX]          // Store the value of CX at the memory location AX+IX is pointing at.
 ```
 
 # Roadmap
