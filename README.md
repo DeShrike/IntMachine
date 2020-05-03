@@ -122,71 +122,123 @@ IF : Interrupt flag (Not used yet)
 
 ## Instructions
 
-JMP
+### JMP
 
-MOV
+Unconditional jump
+```
+JMP Labelname
+```
 
-STOR
+### MOV
 
-CALL
+Move values to registers
+```
+MOV AX, BX
+MOV BX, 1234
+MOV CX, 0xABBA
+MOV DX, 0b11110000
+MOV AX, [BX]
+MOV BX, Labelname
+```
 
-RET
+### STOR
 
-PUSH
+Set memorylocation to a value
 
-POP
+```
+STOR 123, [AX]
+STOR BX, [CX]
+```
 
+### CALL
+
+### RET
+
+### PUSH
+
+Push a value on the stack
+
+```
+PUSH AX
+PUSH BX
+```
+
+### POP
+
+Pop  a value from the stack
+
+```
+POP BX
+POP AX
+```
+
+### PUSHF
+
+Push the flags to the stack
+
+```
 PUSHF
+```
 
+### POPF
+
+Pop the flags from the stack
+
+```
 POPF
+```
 
-ADD
+### ADD
 
-SUB
+### SUB
 
-MUL
+### MUL
 
-DIV
+### DIV
 
-AND
+### AND
 
-OR
+### OR
 
-XOR
+### XOR
 
-NOT
+### NOT
 
-DEC
+### DEC
 
-INC
+### INC
 
-SHL
+### SHL
 
-SHR
+### SHR
 
-JZ
+### JZ
 
-JNZ
+### JNZ
 
-JO
+### JO
 
-JNO
+### JNO
 
-JC
+### JC
 
-JNC
+### JNC
 
-JL
+### JL
 
-JLE
+### JLE
 
-JG
+### JG
 
-JGE
+### JGE
 
-NOP
+### NOP
 
-HLT
+No operation. Does nothing.
+
+### HLT
+
+Halts the CPU.
 
 ## Addressing modes
 
