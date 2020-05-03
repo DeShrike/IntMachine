@@ -167,6 +167,17 @@ class Cpu():
     def STOR(self):
         # print("STOR")
 
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("STOR: Bad Parameter 1", self.IP)
+
+        if self.parameter2Mode != self.REFERENCE:
+            raise ExcecutionError("STOR: Bad Parameter 2", self.IP)
+
+        value = self.determineValue(self.parameter1Mode, self.memory[self.IP + 1])
+        ref = self.getRegister(self.memory[self.IP + 2])
+
+        self.memory[ref] = value
+
         self.IP += 3
         return True
 
@@ -179,37 +190,79 @@ class Cpu():
     def JZ(self):
         # print("JZ")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JZ: Bad Parameter 1", self.IP)
+
+        if self.ZF == True:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+        
         return True
 
     def JNZ(self):
         # print("JNZ")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JNZ: Bad Parameter 1", self.IP)
+
+        if self.ZF == False:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JO(self):
         # print("JO")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JO: Bad Parameter 1", self.IP)
+
+        if self.OF == True:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JNO(self):
         # print("JNO")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JNO: Bad Parameter 1", self.IP)
+
+        if self.OF == False:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JC(self):
-        # print("JO")
+        # print("JC")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JC: Bad Parameter 1", self.IP)
+
+        if self.CF == True:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JNC(self):
         # print("JNC")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JC: Bad Parameter 1", self.IP)
+
+        if self.CF == False:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JL(self):
