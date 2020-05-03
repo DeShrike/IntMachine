@@ -28,7 +28,7 @@ Processes sourcefiles, preparing them for the assembler. This includes processin
 
 ## Assembler.py
 
-Can convert preprocessed assembler code into intcode
+Can convert preprocessed assembler code into intcode.
 
 ## Compiler.py
 
@@ -46,7 +46,7 @@ The computer can load a program into memory and use the CPU to execute it
 
 Has access to the computers memory.
 
-Can execute intcode instructions from memorys
+Can execute intcode instructions from memory.
 
 ## Label.py
 
@@ -77,10 +77,10 @@ The assembler currently supports 3 data types: word, byte and string.
 Examples:
 
 <code>
-Number: 42, word[1]
-String: "Hello world", string[30]
+TheAnswer: 42, word[1]
+Greeting: "Hello world", string[30]
 OtherNumber: 7, byte[1]
-Stack:  0x5555, word[32]
+Stack: 0x5555, word[32]
 </code>
 
 ## Bootstrap
@@ -95,19 +95,29 @@ JMP Main        // Jump to Main
 ## Registers
 
 IP : Instruction pointer
+
 SP : Stack pointer
+
 AX
+
 BX
+
 CX
+
 DX
 
 ## Flags
 
 SF : Sign flag
+
 OF : Overflow flag
+
 ZF : Zero flag
+
 CF : Carry flag
+
 PF : Parity flag (Not used yet)
+
 IF : Interrupt flag (Not used yet)
 
 ## Instructions
@@ -115,42 +125,63 @@ IF : Interrupt flag (Not used yet)
 JMP
 
 MOV
+
 STOR
 
 CALL
+
 RET
 
 PUSH
+
 POP
+
 PUSHF
+
 POPF
 
 ADD
+
 SUB
+
 MUL
+
 DIV
 
 AND
+
 OR
+
 XOR
+
 NOT
 
 DEC
+
 INC
 
 SHL
+
 SHR
 
 JZ
+
 JNZ
+
 JO
+
 JNO
+
 JC
+
 JNC
 
 JL
+
 JLE
+
 JG
+
 JGE
 
 HLT
