@@ -1,4 +1,4 @@
-// Testing AND, OR, XOR.
+// Testing AND, OR, XOR and NOT.
 
 DATA
 
@@ -6,6 +6,7 @@ Stack:     0x5555, word[32]
 ResultAND: 0, word[1]       // Should be 0b10010100 (0x0094)
 ResultOR:  0, word[1]       // Should be 0b11010110 (0x00D6)
 ResultXOR: 0, word[1]       // SHould be 0b01000010 (0x0042)
+ResultNOT: 0, word[1]       // SHould be 0b10101010 (0x00AA)
 
 CODE
 
@@ -38,6 +39,14 @@ MOV BX, 0b11010100
 XOR AX, BX
 
 MOV DX, ResultXOR
+STOR AX, [DX]
+
+Not:
+
+MOV AX, 0b01010101
+NOT AX
+
+MOV DX, ResultNOT
 STOR AX, [DX]
 
 HLT

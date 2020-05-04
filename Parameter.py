@@ -44,8 +44,8 @@ class Parameter():
         if val in Definitions.registers:
             return Parameter.fromRegister(Definitions.registers[val])
 
-        if re.match("^\\[([A-D]X|SP|IP|IX)+IX\\]$", val):
-            val = val[1:-1]
+        if re.match("^\\[([A-D]X)\\+IX\\]$", val):
+            val = val[1:-4]
             return Parameter.fromIndexed(Definitions.registers[val])
 
         if re.match("^\\[([A-D]X|SP|IP|IX)\\]$", val):

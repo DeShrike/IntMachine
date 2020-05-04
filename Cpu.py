@@ -189,6 +189,13 @@ class Cpu():
             return self.memory[regValue + self.IX]
         return -1    
     
+    def setFlagsFromResult(self, value: int):
+        self.setZF(value == 0)
+        self.setSF(value < 0)
+        self.setOF(value < (-2 ** 15) + 1)
+        self.setPF(bin(value).count("1") % 2 == 0)
+        # http://www.c-jump.com/CIS77/ASM/Flags/F77_0110_overflow_flag.htm
+
     def JMP(self):
         # print("JMP")
 
@@ -218,7 +225,7 @@ class Cpu():
         if self.parameter1Mode != self.REGISTER and self.parameter1Mode != self.DIRECT:
             raise ExcecutionError("STOR: Bad Parameter 1", self.IP)
 
-        if self.parameter2Mode != self.REFERENCE:
+        if self.parameter2Mode != self.REFERENCE and self.parameter2Mode != self.INDEXED:
             raise ExcecutionError("STOR: Bad Parameter 2", self.IP)
 
         value = self.determineValue(self.parameter1Mode, self.memory[self.IP + 1])
@@ -241,7 +248,7 @@ class Cpu():
         value1 = self.determineValue(self.parameter1Mode, self.memory[self.IP + 1])
         value2 = self.determineValue(self.parameter2Mode, self.memory[self.IP + 2])
 
-        self.setZF(value1 == value2)
+        self.setFlagsFromResult(value1 - value2)
 
         self.IP += 3
         return True
@@ -327,41 +334,53 @@ class Cpu():
     def JL(self):
         # print("JL")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JL: Bad Parameter 1", self.IP)
+
+        if self.OF() != self.SF():
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JLE(self):
         # print("JLE")
 
-        self.IP += 2
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JLE: Bad Parameter 1", self.IP)
+
+        if self.OF() != self.SF() or self.ZF:
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
+
         return True
 
     def JG(self):
         # print("JG")
 
-        # if self.parameter1Mode != self.DIRECT:
-        #     raise ExcecutionError("JG: Bad Parameter 1", self.IP)
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JG: Bad Parameter 1", self.IP)
 
-        # if self.ZF() == True and self.OF() == self.SF():
-        #     self.IP = self.memory[self.IP + 1]
-        # else:
-        #     self.IP += 2
+        if self.ZF() == False and self.OF() == self.SF():
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
 
-        self.IP += 2
         return True
 
     def JGE(self):
         # print("JGE")
 
-        # if self.parameter1Mode != self.DIRECT:
-        #     raise ExcecutionError("JNG: Bad Parameter 1", self.IP)
+        if self.parameter1Mode != self.DIRECT:
+            raise ExcecutionError("JGE: Bad Parameter 1", self.IP)
 
-        # if self.ZF() == True and self.OF() == self.SF():
-        #     self.IP = self.memory[self.IP + 1]
-        # else:
-        #     self.IP += 2
+        if self.OF() == self.SF():
+            self.IP = self.memory[self.IP + 1]
+        else:
+            self.IP += 2
 
-        self.IP += 2
         return True
 
     def ADD(self):
@@ -380,8 +399,7 @@ class Cpu():
 
         self.setRegister(self.memory[self.IP + 1], value1)
 
-        self.setZF(value1 == 0)
-        self.setOF(value1 > 0xFFFF)
+        self.setFlagsFromResult(value1)
 
         self.IP += 3
         return True
@@ -402,7 +420,7 @@ class Cpu():
 
         self.setRegister(self.memory[self.IP + 1], value1)
 
-        self.setZF(value1 == 0)
+        self.setFlagsFromResult(value1)
 
         self.IP += 3
         return True
@@ -423,8 +441,7 @@ class Cpu():
 
         self.setRegister(self.memory[self.IP + 1], value1)
 
-        self.setZF(value1 == 0)
-        self.setOF(value1 > 0xFFFF)
+        self.setFlagsFromResult(value1)
 
         self.IP += 3
         return True
@@ -459,7 +476,7 @@ class Cpu():
         param1 = self.memory[self.IP + 1]
         value = self.getRegister(param1)
         value = value - 1
-        self.setZF(value == 0)
+        self.setFlagsFromResult(value)
         self.setRegister(param1, value)
 
         self.IP += 2
@@ -474,8 +491,7 @@ class Cpu():
         param1 = self.memory[self.IP + 1]
         value = self.getRegister(param1)
         value = value + 1
-        self.setZF(value == 0)
-        self.setCF(value == 0x10000)
+        self.setFlagsFromResult(value)
         self.setRegister(param1, value)
 
         self.IP += 2
@@ -497,7 +513,7 @@ class Cpu():
 
         self.setRegister(self.memory[self.IP + 1], value1)
 
-        self.setZF(value1 == 0)
+        self.setFlagsFromResult(value1)
 
         self.IP += 3
         return True
@@ -518,7 +534,7 @@ class Cpu():
 
         self.setRegister(self.memory[self.IP + 1], value1)
 
-        self.setZF(value1 == 0)
+        self.setFlagsFromResult(value1)
 
         self.IP += 3
         return True
@@ -539,13 +555,23 @@ class Cpu():
 
         self.setRegister(self.memory[self.IP + 1], value1)
 
-        self.setZF(value1 == 0)
+        self.setFlagsFromResult(value1)
 
         self.IP += 3
         return True
     
     def NOT(self):
         # print("NOT")
+
+        if self.parameter1Mode != self.REGISTER:
+            raise ExcecutionError("XOR: Bad Parameter 1", self.IP)
+
+        value1 = self.getRegister(self.memory[self.IP + 1])
+        value1 = ~value1
+
+        self.setRegister(self.memory[self.IP + 1], value1)
+
+        self.setFlagsFromResult(value1)
 
         self.IP += 2
         return True
@@ -624,8 +650,7 @@ class Cpu():
         param1 = self.memory[self.IP + 1]
         value = self.getRegister(param1)
         value = value << 1
-        self.setZF(value == 0)
-        self.setCF(value > 0xFFFF)
+        self.setFlagsFromResult(value)
         self.setRegister(param1, value)
 
         self.IP += 2
@@ -640,8 +665,7 @@ class Cpu():
         param1 = self.memory[self.IP + 1]
         value = self.getRegister(param1)
         value = value >> 1
-        self.setZF(value == 0)
-        self.setCF(value > 0xFFFF)
+        self.setFlagsFromResult(value)
         self.setRegister(param1, value)
 
         self.IP += 2

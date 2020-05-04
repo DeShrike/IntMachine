@@ -90,7 +90,7 @@ class Assembler():
                     if datatype not in datatypes:
                         raise AssemblerError(f"Unknown datatype: '{datatype}'", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-                    if size < 1 or size > 128:
+                    if size < 1 or size > 255:
                         raise AssemblerError("Bad data length", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
                     if datatype == "string":

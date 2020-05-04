@@ -1,0 +1,30 @@
+// Testing the IX register
+// Store n * n in Squares for n = 1 to 255
+
+DATA
+
+Squares: 0, word[255]
+Stack:   0x5555, word[10]
+
+CODE
+
+Main:
+
+MOV AX, 1
+MOV IX, 0
+MOV CX, Squares
+
+Loop:
+
+MOV BX, AX
+MUL BX, BX
+
+STOR BX, [CX+IX]
+
+INC AX
+INC IX
+
+CMP AX, 255
+JNZ Loop
+
+HLT

@@ -24,7 +24,9 @@ Running without the debugger currently just runs the program and exists. No outp
 
 ## TODO
 
-- Implement all CPU instructions
+- Implement NOT
+- Implement CF
+- Fix Indexed addressing mode
 - Check setting of CPU Flags
 - Test on Linux
 - Test on Mac
@@ -81,15 +83,33 @@ Can execute intcode instructions from memory.
 
 ## Label.py
 
+Defines labels/variables.
+
 ## Instruction.py
 
+Defines a CPU instruction.
+
 ## Parameter.py
+
+Defines a patrameter to an instruction.
 
 ## Debugger.py
 
 Displays memory contents, CPU registers and flags, current intruction and variables. 
 
 Allows executing a program step by step.
+
+## Definitions.py
+
+Misc definitions used by all modules.
+
+## Ansi.py
+
+Used by the debugger to write to the screen.
+
+## KeyGetter.py
+
+Used by the debugger to process keystrokes.
 
 # Assembly language
 
@@ -191,7 +211,19 @@ STOR BX, [CX]
 
 #### CALL
 
+Calls a subroutine.
+
+```
+CALL Subroutine
+```
+
 #### RET
+
+Return from a subroutine.
+
+```
+RET
+```
 
 #### PUSH
 
@@ -229,23 +261,82 @@ POPF
 
 #### ADD
 
+Addition. 
+```
+ADD AX, 7       // AX = AX + 7
+ADD BX, CX      // BX = BX + AX
+ADD CX, 0x10    // CX = CX + 16
+```
+
 #### SUB
+
+Subtraction. 
+```
+SUB AX, 7       // AX = AX - 7
+SUB BX, CX      // BX = BX - AX
+SUB CX, 0x10    // CX = CX - 16
+```
 
 #### MUL
 
+Multiplication. 
+```
+MUL AX, 7       // AX = AX * 7
+MUL BX, CX      // BX = BX * AX
+MUL CX, 0x10    // CX = CX * 16
+```
+
 #### DIV
+
+Integer division. Remainder is in DX.
+```
+DIV AX, 7       // AX = AX / 7
+DIV BX, CX      // BX = BX / AX
+DIV CX, 0x10    // CX = CX / 16
+```
 
 #### AND
 
+Bitwise AND.
+```
+AND AX, 7
+AND BX, CX
+AND CX, 0b10101010
+```
+
 #### OR
 
+Bitwise OR.
+```
+OR AX, 7
+OR BX, CX
+OR CX, 0b10101010
+```
+
 #### XOR
+
+Bitwise XOR.
+```
+XOR AX, 7
+XOR BX, CX
+XOR CX, 0b10101010
+```
 
 #### NOT
 
 #### DEC
 
+Decrement.
+```
+DEC AX          // AX = AX - 1
+```
+
 #### INC
+
+Increment.
+```
+INC BX          // BX = BX - 1
+```
 
 #### SHL
 
