@@ -33,7 +33,9 @@ class Preprocessor():
             if parts[0] == "IMPORT":
                 if len(parts) == 2:
 
-                    include = Program(parts[1])
+                    sourceFile = os.path.join(program.sourceFolder, parts[1])
+                    include = Program(sourceFile)
+
                     preproc = Preprocessor()
                     preproc.preprocess(include)
 

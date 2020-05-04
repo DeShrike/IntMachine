@@ -74,7 +74,7 @@ class Assembler():
                 if self.block != "CODE":
                     raise AssemblerError("Label declaration not in CODE block", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-                self.lastLabel = part0[:10]
+                self.lastLabel = part0[:Definitions.MAXLABELNAMELENGTH]
 
             elif partCount == 3:
                 if self.block != "DATA":
@@ -107,7 +107,7 @@ class Assembler():
             else:
                 raise AssemblerError("Syntax error", self.currentLineNumber + lineNumber, self.currentSourceFile)
 
-            label = Label(part0[:10], datatype, size, value)
+            label = Label(part0[:Definitions.MAXLABELNAMELENGTH], datatype, size, value)
             label.lineNumber = self.currentLineNumber + lineNumber
             label.sourceFile = self.currentSourceFile
             

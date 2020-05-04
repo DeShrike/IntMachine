@@ -1,5 +1,0 @@
-// This file contains usefull functions
-
-IMPORT Factorial.iasm
-IMPORT IsPrime.iasm
-

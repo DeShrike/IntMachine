@@ -1,7 +1,7 @@
 // This programs calculates 7! and 8!
 // BX = Factorial(AX)
 
-IMPORT Lib.iasm
+IMPORT lib.iasm
 
 DATA
 

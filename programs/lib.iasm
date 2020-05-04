@@ -1,0 +1,4 @@
+// This file contains usefull functions
+
+IMPORT lib/factorial.iasm
+IMPORT lib/primecheck.iasm

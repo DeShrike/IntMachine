@@ -1,11 +1,48 @@
 # IntMachine
 
 A virtual computer/CPU written in python, with an assembler and debugger.
+
 Has a 16 bit CPU with 4 all-purpose registers.
+
 Assembly language based loosely on 8086.
+
 Can use 64K 2-byte memory locations. 
 
 ![Debugger Screenshot](IntMachineDebugger.png)
+
+## Usage
+
+```
+python Main.py <sourcefile> [--debug]
+```
+Example:
+```
+python Main.py programs/prog0.iasm --debug
+```
+
+Running without the debugger currently just runs the program and exists. No output is generated.
+
+## TODO
+
+- Implement all CPU instructions
+- Check setting of CPU Flags
+- Test on Linux
+- Test on Mac
+- Scope variables to the file they are defined in
+
+# Dependancies
+
+None
+
+# Compatibility
+
+Tested with Python 3.7.0, but should also work with 3.5.0 and above.
+
+Developed on Windows 10.
+
+Runs in terminal (CMD.exe), powershell terminal and mintty (Git Bash).
+
+Tested on a Raspberry PI 3B+ using PuTTY.
 
 # Source Code
 
@@ -81,7 +118,7 @@ Stack: 0x5555, word[32]
 
 Currently there is no variable scope; all variables are global.
 
-Variable names are truncated to 10 characters.
+Variable names are truncated to 12 characters.
 
 ## Bootstrap
 

@@ -2,8 +2,7 @@ from Exceptions import ExcecutionError
 from Cpu import *
 from Program import *
 from Computer import *
-import Ansi
-import sys
+from Ansi import *
 import time
 
 class Debugger():
@@ -21,7 +20,10 @@ class Debugger():
         self.currentVariableStart = 0
         self.currectVariableSize = 0
         self.halted = False
-        Ansi.InitAnsi()
+        Ansi.Init()
+
+    def stripFolderName(self, filename: str) -> str:
+        return os.path.basename(filename)
 
     def updateDisplay(self):
         if self.mode == self.INSTRUCTIONMODE:
@@ -50,53 +52,53 @@ class Debugger():
         self.showKeys()
         print(Ansi.MoveCursor(1, 1), end = "")
 
-        sys.stdout.flush()
+        Ansi.Flush()
 
     def showCurrentInstruction(self):
+        print(Ansi.MoveCursor(1, 21) + Ansi.ClearLine, end = "")
         print(Ansi.MoveCursor(1, 22) + Ansi.ClearLine, end = "")
-        print(Ansi.MoveCursor(1, 23) + Ansi.ClearLine, end = "")
         for i in self.program.instructions:
             if i.position == self.computer.cpu.IP:
                 disass = i.disassemble()
                 label = i.labelName if i.labelName != None else ""
-                print(Ansi.MoveCursor(1, 22) + Ansi.White + "%10s " % label, end = "")
+                print(Ansi.MoveCursor(1, 21) + Ansi.White + "%12s " % label, end = "")
                 print(Ansi.BrightYellow + "%04X " % i.position + Ansi.Reset, end = "")
                 print(Ansi.Yellow + "%-30s" % disass + " " + Ansi.Reset, end = "")
 
-                print(Ansi.MoveCursor(55, 22), end ="")
-                print(Ansi.Green + "%20s " % i.sourceFile + Ansi.Reset, end = "")
+                print(Ansi.MoveCursor(55, 21), end ="")
+                print(Ansi.Green + "%20s " % self.stripFolderName(i.sourceFile) + Ansi.Reset, end = "")
                 print("(" + Ansi.BrightGreen + "%d" % i.lineNumber + Ansi.Reset + ")", end = "")
                 bb = i.getBytes()
-                print(Ansi.MoveCursor(17, 23) + Ansi.Yellow, end = "")
+                print(Ansi.MoveCursor(19, 22) + Ansi.Yellow, end = "")
                 for b in bb:
                     print("%04X " % b, end = "")
                 break
 
     def showVariable(self, line: int, label: Label):
-        print(Ansi.MoveCursor(1, line) + Ansi.Yellow + ("-> " if line == 22 else "   "), end = "")
-        print(Ansi.White + "%10s " % label.name, end = "")
-        print("[" + (Ansi.BrightGreen if line == 22 else Ansi.BrightWhite) + "%04X" % label.position + Ansi.Reset + Ansi.White + "] ", end = "")
+        print(Ansi.MoveCursor(1, line) + Ansi.Yellow + ("-> " if line == 21 else "   "), end = "")
+        print(Ansi.White + "%12s " % label.name, end = "")
+        print("[" + (Ansi.BrightGreen if line == 21 else Ansi.BrightWhite) + "%04X" % label.position + Ansi.Reset + Ansi.White + "] ", end = "")
         if label.datatype != None:
             print("(%s[%d]) = " % (label.datatype, label.size), end = "")
 
         print(Ansi.MoveCursor(55, line), end ="")
-        print(Ansi.Green + "%20s " % label.sourceFile + Ansi.Reset, end = "")
+        print(Ansi.Green + "%20s " % self.stripFolderName(label.sourceFile) + Ansi.Reset, end = "")
         print("(" + Ansi.BrightGreen + "%d" % label.lineNumber + Ansi.Reset + ")", end = "")
 
     def showVariables(self):
+        print(Ansi.MoveCursor(1, 21) + Ansi.ClearLine, end = "")
         print(Ansi.MoveCursor(1, 22) + Ansi.ClearLine, end = "")
-        print(Ansi.MoveCursor(1, 23) + Ansi.ClearLine, end = "")
         self.scrollOffset = max(0, min(len(self.program.labels) - 1, self.scrollOffset))
 
         label = self.program.labels[self.scrollOffset]
-        self.showVariable(22, label)
+        self.showVariable(21, label)
 
         self.currentVariableStart = label.position
         self.currectVariableSize = label.size
 
         if len(self.program.labels) >= self.scrollOffset + 2:
             label = self.program.labels[self.scrollOffset + 1]
-            self.showVariable(23, label)
+            self.showVariable(22, label)
 
     def showRegister(self, name: str, value: int, line: int, col: int, color: str = Ansi.BrightWhite):
         print(Ansi.MoveCursor(col, line) + Ansi.GreenBackground + Ansi.BrightWhite + " %s " % name + Ansi.Reset, end = "")
@@ -121,7 +123,7 @@ class Debugger():
             "T": "Reset", 
             "Q": "Quit" 
             }
-        print(Ansi.MoveCursor(1, 25), end = "")
+        print(Ansi.MoveCursor(1, 23), end = "")
         for k in keys:
             print(Ansi.RedBackground + Ansi.BrightBlue + " %s " % k + Ansi.Black + "%s " % keys[k] + Ansi.Reset + " ", end = "")
 
@@ -153,16 +155,16 @@ class Debugger():
         stepMode = True
         self.halted = False
         while True:
-            ch = Ansi.ReadChar()
+            ch = Ansi.GetKey()
             if ch == Ansi.ESC:
                 pass
             elif ch == Ansi.ENTER:
                 pass
-            elif ch == Ansi.ARROWDOWN:
+            elif ch == Ansi.ARROWDOWN or ch == ord("U") or ch == ord("u"):
                 if self.mode == self.VARIABLEMODE:
                     self.scrollOffset += 1
                     self.updateDisplay()
-            elif ch == Ansi.ARROWUP:
+            elif ch == Ansi.ARROWUP or ch == ord("D") or ch == ord("d"):
                 if self.mode == self.VARIABLEMODE:
                     self.scrollOffset -= 1
                     self.updateDisplay()

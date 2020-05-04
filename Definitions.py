@@ -8,6 +8,8 @@ MOV CX, [AX]    reg, ref
 STOR AX, [BX]	reg, ref
 """
 
+MAXLABELNAMELENGTH = 12
+
 addressingModes = { 
     "direct": 10,
     "register": 11,

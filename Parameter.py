@@ -57,7 +57,7 @@ class Parameter():
             return Parameter.fromDirect(n)
 
         if re.match("^([0-9a-zA-Z_]{1,32})$", val):
-            return Parameter.fromLabel(val[:10])
+            return Parameter.fromLabel(val[:Definitions.MAXLABELNAMELENGTH])
 
         return None
 

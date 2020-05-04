@@ -5,13 +5,14 @@ from Assembler import *
 from Compiler import *
 from Exceptions import PreprocessorError, AssemblerError, CompilerError, ExcecutionError
 from Cpu import *
+import sys
 
 # python -m mypy Main.py
 
-if __name__ == "__main__":
+def Run(source: str, debug: bool):
 
     try:
-        prog = Program("Prog6.iasm")
+        prog = Program(source)
 
         preproc = Preprocessor()
         preproc.preprocess(prog)
@@ -41,10 +42,12 @@ if __name__ == "__main__":
 
         computer = Computer()
         computer.loadProgram(prog)
-        # computer.run()
 
-        debugger = Debugger(computer, prog)
-        debugger.run()
+        if debug == False:
+            computer.run()
+        else:
+            debugger = Debugger(computer, prog)
+            debugger.run()
 
     except PreprocessorError as e:
         print(e)
@@ -57,4 +60,20 @@ if __name__ == "__main__":
 
     except Exception as e:
         raise e
+
+if __name__ == "__main__":
+
+    useDebugger = False
+    source = None
+
+    for i, arg in enumerate(sys.argv):
+        if arg == "--debug":
+            useDebugger = True
+        elif arg[-5:] == ".iasm":
+            source = arg
+        
+    if source == None:
+        print("Usage: python Main.py <source> [--debug]")
+    else:
+        Run(source, useDebugger)
 
