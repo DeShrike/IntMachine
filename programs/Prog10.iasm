@@ -1,0 +1,12 @@
+DATA
+
+Stack: 0xAAAA, word[32]
+
+CODE
+
+Main:
+
+
+
+HLT
+

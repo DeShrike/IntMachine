@@ -45,6 +45,14 @@ def Run(source: str, debug: bool):
 
         if debug == False:
             computer.run()
+
+            for l in prog.labels:
+                if l.size > 0:
+                    print("%13s (%6s[%3d]): " % (l.name, l.datatype, l.size), end ="")
+                    for i in range(l.position, l.position + l.size):
+                        print("%d " % computer.memory[i], end = "")
+                    print("")
+
         else:
             debugger = Debugger(computer, prog)
             debugger.run()
@@ -71,7 +79,7 @@ if __name__ == "__main__":
             useDebugger = True
         elif arg[-5:] == ".iasm":
             source = arg
-        
+
     if source == None:
         print("Usage: python Main.py <source> [--debug]")
     else:

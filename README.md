@@ -20,13 +20,12 @@ Example:
 python Main.py programs/prog0.iasm --debug
 ```
 
-Running without the debugger currently just runs the program and exists. No output is generated.
+Running without the debugger currently just runs the program and shows the variables and their final value.
 
 ## TODO
 
 - Implement NOT
-- Implement CF
-- Fix Indexed addressing mode
+- Implement/Fix CF and OF
 - Check setting of CPU Flags
 - Test on Linux
 - Test on Mac
@@ -175,7 +174,7 @@ ZF : Zero flag
 
 CF : Carry flag
 
-PF : Parity flag (Not used yet)
+PF : Parity flag
 
 IF : Interrupt flag (Not used yet)
 
@@ -293,6 +292,8 @@ Integer division. Remainder is in DX.
 DIV AX, 7       // AX = AX / 7
 DIV BX, CX      // BX = BX / AX
 DIV CX, 0x10    // CX = CX / 16
+CMP DX, 0
+JZ NoRemainder
 ```
 
 #### AND
@@ -340,19 +341,65 @@ INC BX          // BX = BX - 1
 
 #### SHL
 
+Bit shift left.
+```
+SHL AX
+```
+
 #### SHR
+
+Bit shift right.
+```
+SHR BX
+```
 
 #### JZ
 
+Jump if ZF is set.
+```
+CMP AX, 10
+JZ Loop
+```
+
 #### JNZ
+
+Jump if ZF is not set.
+```
+CMP AX, 10
+JNZ Loop
+```
 
 #### JO
 
+Jump if OF is set.
+```
+MUL AX, 10
+JO Loop
+```
+
 #### JNO
+
+Jump if OF is not set.
+```
+MUL AX, 10
+JNO Loop
+```
 
 #### JC
 
+Jump if CF is set.
+```
+ADD AX, 10
+JC Loop
+```
+
 #### JNC
+
+Jump if CF is not set.
+```
+ADD AX, 10
+JNC Loop
+```
 
 #### JL
 

@@ -1,0 +1,57 @@
+// Testing JZ, JNZ, JC, JNC, JO, JNO
+
+DATA
+
+Stack: 0xAAAA, word[20]
+HasError: 0, word[1]
+
+CODE
+
+Main:
+
+MOV CX, 1
+
+MOV AX, 13
+SUB AX, 12      // ZF should be 0
+JZ SetError
+
+MOV CX, 2
+
+MOV AX, 123
+SUB AX, 123     // ZF should be 1
+JNZ SetError
+
+MOV CX, 3
+
+MOV AX, 0xFFFF
+INC AX          // CF should be 1
+JNC SetError
+
+MOV CX, 4
+
+MOV AX, 0xFF00
+ADD AX, 0x00FF  // CF should be 0
+JC SetError
+
+MOV CX, 5
+
+MOV AX, 0x1000
+MUL AX, 20      // OF should be 1
+JNO SetError
+
+MOV CX, 6
+
+MOV AX, 0x1000
+MUL AX, 2       // OF should be 0
+JO SetError
+
+JMP Stop
+
+SetError:
+
+MOV DX, HasError
+STOR CX, [DX]
+
+Stop:
+
+HLT

@@ -27,4 +27,22 @@ INC IX
 CMP AX, 255
 JNZ Loop
 
+// Now read back
+
+MOV AX, 1
+MOV IX, 0
+MOV CX, Squares
+
+Loop2:
+
+MOV BX, [CX+IX]
+DIV BX, AX
+STOR BX, [CX+IX]
+
+INC AX
+INC IX
+
+CMP AX, 255
+JNZ Loop2
+
 HLT

@@ -135,6 +135,9 @@ class Cpu():
         else:
             self.FLAGS = self.FLAGS & 0b011111
 
+    def makeWord(self, value: int) -> int:
+        return value & 0xFFFF
+
     def cycle(self) -> bool:
         i = self.memory[self.IP]
         opcode = i & 0x00FF
@@ -145,19 +148,19 @@ class Cpu():
 
     def setRegister(self, reg: int, value: int):
         if reg == self.REGAX:
-            self.AX = value
+            self.AX = self.makeWord(value)
         elif reg == self.REGBX:
-            self.BX = value
+            self.BX = self.makeWord(value)
         elif reg == self.REGCX:
-            self.CX = value
+            self.CX = self.makeWord(value)
         elif reg == self.REGDX:
-            self.DX = value
+            self.DX = self.makeWord(value)
         elif reg == self.REGIX:
-            self.IX = value
+            self.IX = self.makeWord(value)
         elif reg == self.REGIP:
-            self.IP = value
+            self.IP = self.makeWord(value)
         elif reg == self.REGSP:
-            self.SP = value
+            self.SP = self.makeWord(value)
 
     def getRegister(self, reg: int) -> int:
         if reg == self.REGAX:
@@ -194,6 +197,7 @@ class Cpu():
         self.setSF(value < 0)
         self.setOF(value < (-2 ** 15) + 1)
         self.setPF(bin(value).count("1") % 2 == 0)
+        self.setCF(value > (2 ** 16) - 1)
         # http://www.c-jump.com/CIS77/ASM/Flags/F77_0110_overflow_flag.htm
 
     def JMP(self):
@@ -230,8 +234,9 @@ class Cpu():
 
         value = self.determineValue(self.parameter1Mode, self.memory[self.IP + 1])
         ref = self.getRegister(self.memory[self.IP + 2])
-
-        self.memory[ref] = value
+        if self.parameter2Mode == self.INDEXED:
+            ref += self.IX
+        self.memory[ref] = self.makeWord(value)
 
         self.IP += 3
         return True
