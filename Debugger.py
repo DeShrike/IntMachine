@@ -11,11 +11,14 @@ class Debugger():
     VARIABLEMODE = 2
     SLOW = 1
     FAST = 0.1
+    MEMORYMODE = 1
+    TEXTDISPLAYMODE = 2
 
     def __init__(self, computer: Computer, program: Program):
         self.computer = computer
         self.program = program
         self.mode = self.INSTRUCTIONMODE
+        self.mode2 = self.MEMORYMODE
         self.scrollOffset = 0
         self.currentVariableStart = 0
         self.currectVariableSize = 0
@@ -31,7 +34,12 @@ class Debugger():
         elif self.mode == self.VARIABLEMODE:
             self.showVariables()
 
-        self.showMemory()
+        if self.mode2 == self.MEMORYMODE:
+            self.showMemory()
+            print(Ansi.MoveCursor(1, 18) + Ansi.ClearLine, end = "")
+
+        elif self.mode2 == self.TEXTDISPLAYMODE:
+            self.showTextDisplay()
 
         self.showRegister("IP", self.computer.cpu.IP, 19, 1, Ansi.BrightYellow)
         self.showRegister("SP", self.computer.cpu.SP, 19, 19, Ansi.BrightMagenta)
@@ -53,6 +61,9 @@ class Debugger():
         print(Ansi.MoveCursor(1, 1), end = "")
 
         Ansi.Flush()
+
+    def showTextDisplay(self):
+        self.computer.display.render()
 
     def showCurrentInstruction(self):
         print(Ansi.MoveCursor(1, 21) + Ansi.ClearLine, end = "")
@@ -113,7 +124,7 @@ class Debugger():
 
     def showKeys(self):
         keys = { 
-            "A": "    ", 
+            "M": "Scrn" if self.mode2 == self.MEMORYMODE else "Memo", 
             "C": "Code", 
             "V": "Vars", 
             "W": "Slow", 
@@ -183,6 +194,9 @@ class Debugger():
                 self.updateDisplay()
             elif ch == ord("V") or ch == ord("v"):
                 self.mode = self.VARIABLEMODE
+                self.updateDisplay()
+            elif ch == ord("M") or ch == ord("m"):
+                self.mode2 = self.TEXTDISPLAYMODE if self.mode2 == self.MEMORYMODE else self.MEMORYMODE
                 self.updateDisplay()
             elif ch == ord("F") or ch == ord("f"):
                 delayTime = self.FAST

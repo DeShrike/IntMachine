@@ -2,3 +2,4 @@
 
 IMPORT lib/factorial.iasm
 IMPORT lib/primecheck.iasm
+IMPORT lib/displaydriver.iasm

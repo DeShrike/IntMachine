@@ -1,3 +1,4 @@
+from Computer import *
 import Definitions
 from Exceptions import ExcecutionError
 from typing import List, Dict, Callable
@@ -17,8 +18,9 @@ class Cpu():
     REGSP = 14
     REGIP = 15
 
-    def __init__(self, memory: List[int]):
-        self.memory = memory
+    def __init__(self, computer: "Computer"):
+        self.computer = computer
+        self.memory = computer.memory
         self.reset()
         self.parameter1Mode = 0
         self.parameter2Mode = 0
@@ -70,6 +72,14 @@ class Cpu():
             0x00EE: self.NOP,
             0x00FF: self.HLT
         }
+
+    def setMemory(self, address: int, value: int):
+        self.memory[address] = value
+        if address > self.computer.display.startAddress and address < self.computer.display.startAddress + self.computer.display.memorySize:
+            self.computer.display.setMemory(address - self.computer.display.startAddress, value)           
+
+    def getMemory(self, address: int) -> int:
+        return self.memory[address]
 
     def reset(self) -> None:
         self.AX = 0
@@ -236,7 +246,7 @@ class Cpu():
         ref = self.getRegister(self.memory[self.IP + 2])
         if self.parameter2Mode == self.INDEXED:
             ref += self.IX
-        self.memory[ref] = self.makeWord(value)
+        self.setMemory(ref, self.makeWord(value))
 
         self.IP += 3
         return True

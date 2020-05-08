@@ -1,0 +1,43 @@
+// Testing the TextDisplay
+
+IMPORT lib.iasm
+
+DATA
+
+Stack: 0x5555, word[32]
+
+CODE
+
+Main:
+
+MOV AX, 0
+MOV BX, 0
+
+LoopLine:
+
+CALL MoveCursor
+
+Loopp:
+
+PUSH AX
+MOV AX, 65
+CALL PrintCh
+POP AX
+
+INC AX
+
+CALL MoveRight
+
+CMP AX, 64
+JNZ Loopp
+
+INC BX
+CMP BX, 16
+JZ Donee
+
+MOV AX, 0
+JMP LoopLine
+
+Donee:
+
+HLT

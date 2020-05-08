@@ -1,14 +1,16 @@
 from Exceptions import ExcecutionError
 from Cpu import *
+from Display import *
 from Program import *
 
 class Computer():
 
 	def __init__(self):
-		self.memorySize = 1024
+		self.memorySize = 0xFFFF
 		self.memory = [0 for _ in range(self.memorySize)]
-		self.cpu = Cpu(self.memory)
-
+		self.display = Display()
+		self.cpu = Cpu(self)
+	
 	def loadProgram(self, program: Program) -> None:
 		if program.assembled == False:
 			raise ExcecutionError("Program not compiled", 0)

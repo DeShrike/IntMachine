@@ -30,6 +30,7 @@ Running without the debugger currently just runs the program and shows the varia
 - Test on Linux
 - Test on Mac
 - Scope variables to the file they are defined in
+- Add support for 'SYstem-Code': code that always runs at full speed in the debugger
 
 # Dependancies
 
@@ -53,6 +54,10 @@ Contains:
 - sourcecode
 - preprocessor result
 - assembler result, this is the intcode for the CPU
+
+## Display.py
+
+A 64 x 16 8 color text display.
 
 ## Preprocessor.py
 
@@ -473,7 +478,6 @@ STOR CX, [AX+IX]          // Store the value of CX at the memory location AX+IX 
 # Roadmap
 
 - Add support for floating point instructions.
-- Add some kind of output device.
 - Add support for input.
 - Write a library with common functions.
 - Add a compiler that can compile (transpile ?) a higher level language to assembly sourcecode.
