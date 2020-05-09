@@ -1,21 +1,45 @@
 // Testing the TextDisplay
 
-IMPORT lib.iasm
+IMPORT lib/displaydriver.iasm
 
 DATA
 
-Stack: 0x5555, word[32]
+Colour: 0, word[1]
+Hello: "Hello World !", string[15]
+Stack: 0x5555, word[20]
 
 CODE
 
 Main:
 
-MOV AX, 0
-MOV BX, 0
+MOV AX, 26
+MOV BX, 7
+CALL MoveCursor
+
+MOV AX, 3    // Yellow
+CALL SetColor
+
+MOV AX, Hello
+CALL PrintString
+
+MOV AX, 29
+MOV BX, 8
+CALL MoveCursor
+
+MOV AX, 5    // Magenta
+CALL SetColor
+
+MOV AX, 54321
+CALL PrintNumber
+
+MOV AX, 0   // Column
+MOV BX, 0   // Line
 
 LoopLine:
 
 CALL MoveCursor
+
+CALL NextColour
 
 Loopp:
 
@@ -25,8 +49,6 @@ CALL PrintCh
 POP AX
 
 INC AX
-
-CALL MoveRight
 
 CMP AX, 64
 JNZ Loopp
@@ -41,3 +63,27 @@ JMP LoopLine
 Donee:
 
 HLT
+
+NextColour:
+
+PUSH DX
+PUSH CX
+PUSH BX
+PUSH AX
+
+MOV DX, Colour
+MOV AX, [DX]
+INC AX
+CMP AX, 8
+JNZ NextColorJ
+MOV AX, 1
+NextColorJ:
+STOR AX, [DX]
+CALL SetColor
+
+POP AX
+POP BX
+POP CX
+POP DX
+
+RET

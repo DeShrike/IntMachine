@@ -13,12 +13,16 @@ class Display():
 
 	def __init__(self):
 		self.memory = [0 for _ in range(self.memorySize)]
+		# set all color to White
+		for c in range(self.memorySize // 2):
+			self.memory[c * 2] = 7
 		self.needsRefresh = True
 
 	def render(self):
 		if self.needsRefresh == False:
 			return
 
+		lastcol = -1
 		print(Ansi.MoveCursor(1, 1) + Ansi.BlueBackground + Ansi.BrightWhite, end = "")
 		print("+" + ("-" * self.columns) + "+", end = "")
 		for l in range(self.lines):
@@ -26,6 +30,11 @@ class Display():
 
 			for c in range(self.columns):
 				mempos = l * (self.columns * 2) + (c * 2)
+				col = self.memory[mempos]
+				if col != lastcol:
+					lastcol = col
+					print(Ansi.SetColor(col), end = "")
+
 				cha = chr(self.memory[mempos + 1])
 				print(cha, end = "")
 

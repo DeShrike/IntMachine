@@ -86,6 +86,10 @@ class Ansi():
     ShowCursor = u"\u001b[?25h"
 
     @staticmethod
+    def SetColor(color: int) -> str:
+        return u"\u001b[3%dm" % color
+
+    @staticmethod
     def CursorToColumn(column: int) -> str:
         return Ansi.ToColumn % column
 

@@ -20,7 +20,7 @@ Example:
 python Main.py programs/prog0.iasm --debug
 ```
 
-Running without the debugger currently just runs the program and shows the variables and their final value.
+Running without the debugger currently just runs the program and then shows the variables and their final value.
 
 ## TODO
 
@@ -30,7 +30,10 @@ Running without the debugger currently just runs the program and shows the varia
 - Test on Linux
 - Test on Mac
 - Scope variables to the file they are defined in
-- Add support for 'SYstem-Code': code that always runs at full speed in the debugger
+- Add support for 'System-Code': code that always runs at full speed in the debugger
+- Add support for #define to preprocessor
+- Implement array initializers to assembler
+- Add new screenshot(s)
 
 # Dependancies
 
