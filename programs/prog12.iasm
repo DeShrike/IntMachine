@@ -1,0 +1,60 @@
+// Print all primes between 1000 and 2000
+
+IMPORT lib/displaydriver.iasm
+IMPORT lib/primecheck.iasm
+
+DATA
+
+Colour: 0, word[1]
+Stack: 0x5555, word[20]
+
+CODE
+
+Main:
+
+MOV AX, 1001
+CALL NextColour
+
+PrintN:
+
+CALL PrimeCheck
+CMP BX, 0
+JZ DoNext
+
+CALL PrintNumber
+CALL NextColour
+CALL MoveRight
+
+DoNext:
+
+INC AX
+INC AX
+
+CMP AX, 2001
+JNZ PrintN
+
+HLT
+
+NextColour:
+
+PUSH DX
+PUSH CX
+PUSH BX
+PUSH AX
+
+MOV DX, Colour
+MOV AX, [DX]
+INC AX
+CMP AX, 8
+JNZ NextColorJ
+MOV AX, 1
+NextColorJ:
+STOR AX, [DX]
+CALL SetColor
+
+POP AX
+POP BX
+POP CX
+POP DX
+
+RET

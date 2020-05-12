@@ -22,6 +22,43 @@ python Main.py programs/prog0.iasm --debug
 
 Running without the debugger currently just runs the program and then shows the variables and their final value.
 
+## Sample Program
+
+```
+// Calculate Number1 * Number2 and store result in Product
+
+DATA                        // Start the DATA block
+
+Number1: 7, word[1]         // Reserve a location in memory to hold a number and initialize it to 7 
+Number2: 6, word[1]         // A second variable with value 6
+Product: 0, word[1]         // A third veriable
+Stack:   0x5555, word[32]   // Reserve 32 words for the stack (not used in this program)
+
+CODE                        // Start the CODE block
+
+Main:                       // Entry point
+
+JMP DummyLabel              // Jump to DummyLabel
+
+PUSH AX                     // PUSH the value of register on the stack (this code is never reached)
+POP AX                      // POP a value from the stack and place it in register AX
+
+DummyLabel:                 // Define a label
+
+MOV AX, Number1			    // Load address of Number1 in AX
+MOV BX, [AX]                // Load value of Number1 in BX
+
+MOV AX, Number2			    // Load address of Number2 in AX
+MOV CX, [AX]                // Load value of Number2 in CX
+
+MUL CX, BX                  // CX = CX * BX
+
+MOV AX, Product			    // Load address of Product in AX
+STOR CX, [AX]               // Store value of CX in memory location of Product
+
+HLT                         // Halt the CPU
+```
+
 ## TODO
 
 - Implement NOT

@@ -21,8 +21,10 @@ class Computer():
 	def run(self) -> None:
 		Ansi.Init()
 		print(Ansi.HideCursor + Ansi.Clear)
+
 		self.cpu.reset()
 		while self.cpu.cycle():
 			self.display.render()
 			pass
+
 		print(Ansi.ShowCursor)
