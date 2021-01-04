@@ -1,0 +1,169 @@
+DATA
+
+Address:        0xF000, word[1]
+CurrentAddress: 0, word[1]
+CurrentColor:   7, word[1]
+
+// 64 Columns
+// 16 Lines
+
+CODE
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// AX = color to set, 0-7
+
+SetColor:
+
+PUSH BX
+MOV BX, CurrentColor
+STOR AX, [BX]
+POP BX
+
+RET
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// AX = Column
+// BX = Row
+
+MoveCursor:
+
+PUSH CX
+PUSH DX
+
+MOV CX, BX
+MUL CX, 64
+MUL CX, 2
+ADD CX, AX
+ADD CX, AX
+
+MOV DX, CurrentAddress
+STOR CX, [DX]
+
+POP DX
+POP CX
+
+RET
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// AX = char
+
+PrintCh:
+
+PUSH DX
+PUSH CX
+
+MOV DX, Address
+MOV CX, [DX]
+
+MOV DX, CurrentAddress
+MOV DX, [DX]
+
+ADD DX, CX
+
+MOV CX, CurrentColor
+MOV CX, [CX]
+STOR CX, [DX]
+INC DX
+STOR AX, [DX]
+
+MOV DX, CurrentAddress
+MOV CX, [DX]
+ADD CX, 2
+STOR CX, [DX]
+
+POP CX
+POP DX
+
+RET
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+MoveRight:
+
+PUSH DX
+PUSH CX
+
+MOV DX, CurrentAddress
+MOV CX, [DX]
+ADD CX, 2
+STOR CX, [DX]
+
+POP CX
+POP DX
+
+RET
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// AX Should point to the start of the string.
+
+PrintString:
+
+PUSH IX
+PUSH BX
+
+MOV IX, 0
+
+LoopPrintString:
+
+MOV BX, [AX+IX]
+CMP BX, 0
+JZ EndPrintString
+
+PUSH AX
+MOV AX, BX
+CALL PrintCh
+POP AX
+
+INC IX
+
+JMP LoopPrintString
+
+EndPrintString:
+
+POP BX
+POP IX
+RET
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// AX = The number to print
+// Prints a number, base 10, with leading zeros.
+
+PrintNumber:
+
+PUSH AX
+
+DIV AX, 10000
+ADD AX, 48
+CALL PrintCh
+MOV AX, DX
+
+DIV AX, 1000
+ADD AX, 48
+CALL PrintCh
+MOV AX, DX
+
+DIV AX, 100
+ADD AX, 48
+CALL PrintCh
+MOV AX, DX
+
+DIV AX, 10
+ADD AX, 48
+CALL PrintCh
+MOV AX, DX
+
+ADD AX, 48
+CALL PrintCh
+
+POP AX
+
+RET
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////

@@ -1,0 +1,58 @@
+CODE
+
+////////////////
+// PrimeCheck //
+////////////////
+
+// Checks if the value in AX is prime. If so, BX wil be set to 1, otherwise to 0.
+
+PrimeCheck:
+
+PUSH CX
+
+CMP AX, 1
+JZ ReturnIsNotPrime
+
+CMP AX, 2
+JZ ReturnIsPrime
+
+CMP AX, 3
+JZ ReturnIsPrime
+
+PUSH AX
+DIV AX, 2
+POP AX
+
+CMP DX, 0
+JZ ReturnIsNotPrime
+
+MOV BX, 3
+
+Divide:
+
+PUSH AX
+DIV AX, BX
+POP AX
+
+CMP DX, 0
+JZ ReturnIsNotPrime
+
+ADD BX, 2
+CMP BX, AX
+JGE ReturnIsPrime
+JMP Divide
+
+ReturnIsNotPrime:
+
+MOV BX, 0
+JMP ReturnPrime
+
+ReturnIsPrime:
+
+MOV BX, 1
+
+ReturnPrime:
+
+POP CX
+
+RET
